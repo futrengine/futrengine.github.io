@@ -37,7 +37,7 @@ document.getElementById('signup-form').addEventListener('submit', (e) => {
         // Show sign up success message and redirect to sign in page
         document.getElementById('signup-error').innerHTML = 'Sign up successful! Please sign in.';
         setTimeout(() => {
-            window.location.href = 'ignin.html';
+            window.location.href = 'signin.html';
         }, 2000); // redirect after 2 seconds
     } else {
         document.getElementById('signup-error').innerHTML = 'Please fill all fields.';
