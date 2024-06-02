@@ -30,14 +30,15 @@ async function saveUsers() {
 document.getElementById('signin-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
-   const password = document.getElementById('password').value;
+    const password = document.getElementById('password').value;
     // TO DO: Implement password hashing and salting
     const user = users.find((user) => user.username === username && user.password === password);
     if (user) {
         console.log('Signed in successfully!');
         // TO DO: Implement authentication and authorization
+        window.location.href = 'index.html';
     } else {
-        console.error('Invalid username or password');
+        document.getElementById('signin-error').innerHTML = 'Invalid username or password';
     }
 });
 
@@ -53,7 +54,10 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
     await saveUsers();
     console.log('Signed up successfully!');
     // TO DO: Implement authentication and authorization
+    window.location.href = 'index.html';
 });
+
+loadUsers();
 
 // Toggle sign in and sign up popups
 document.getElementById('signin-btn').addEventListener('click', () => {
