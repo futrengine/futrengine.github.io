@@ -3,115 +3,6 @@ body {
     margin: 0;
     padding: 0;
 }
-.signup-container,.signin-container {
-    position: relative;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.bg-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh; /* Set the height to 100vh to cover the entire screen */
-    background-image: url('backg.jpg'); /* Replace with your background image URL */
-    background-size: cover;
-    background-position: center;
-    filter: blur(5px);
-}
-
-.signup-form,.signin-form {
-    position: relative;
-    z-index: 1;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-.signup-form h1,.signin-form h1 {
-    margin-top: 0;
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-}
-
-label {
-    margin-bottom: 10px;
-}
-
-input[type="text"], input[type="password"], input[type="email"] {
-    padding: 10px;
-    margin-bottom: 20px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-input[type="submit"] {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4CAF50;
-    color: #fff;
-    cursor: pointer;
-}
-
-input[type="submit"]:hover {
-    background-color: #3e8e41;
-}
-
-#error {
-    color: #red;
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-
-.nav-btn {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.nav-btn:hover {
-    background-color: #444;
-}
-
-
-button {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #444;
-}
-
-#home-btn {
-    background-color: #4CAF50; /* green */
-}
-
-#signup-btn {
-    background-color: #FF9800; /* orange */
-}
-
-#signin-btn {
-    background-color: #2196F3; /* blue */
-}
-
-
-
 
 header {
     background-color: #333;
@@ -119,7 +10,6 @@ header {
     padding: 1em;
     text-align: center;
 }
-
 
 nav ul {
     list-style: none;
@@ -129,19 +19,13 @@ nav ul {
     justify-content: space-between;
 }
 
-
 nav li {
     margin-right: 20px;
 }
 
-
 nav a {
-    text-decoration: none;
     color: #fff;
-}
-
-nav a:hover {
-    color: #ccc;
+    text-decoration: none;
 }
 
 .popup {
@@ -152,56 +36,52 @@ nav a:hover {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup.active {
+    display: flex;
 }
 
 .popup-content {
     background-color: #fff;
     padding: 20px;
-    border: 1px solid #ddd;
     border-radius: 10px;
-    width: 300px;
-    margin: 40px auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .popup-content h2 {
     margin-top: 0;
 }
 
-#signin-btn, #signup-btn {
+.popup-content form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup-content label {
+    margin-bottom: 10px;
+}
+
+.popup-content input {
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
     background-color: #333;
     color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
 }
 
-#signin-btn:hover, #signup-btn:hover {
+.popup-content button:hover {
     background-color: #444;
-}
-
-#signin-submit, #signup-submit {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#signin-submit:hover, #signup-submit:hover {
-    background-color: #444;
-}
-
-#signin-link, #signup-link {
-    background-color: #fff;
-    color: #333;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#signin-link:hover, #signup-link:hover {
-    background-color: #ccc;
 }
