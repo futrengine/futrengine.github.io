@@ -13,6 +13,29 @@ function loadUsers() {
     xhr.send();
 }
 
+// Sign in functionality
+document.getElementById('signin-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Check if user exists
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        // Sign in successful
+        document.getElementById('signin-error').innerHTML = '';
+        // Redirect to home page or any other page
+        window.location.href = 'index.html';
+    } else {
+        // Sign in failed
+        document.getElementById('signin-error').innerHTML = 'User not found or incorrect password. Please sign up or try again.';
+    }
+});
+
+// Load users from file when the page loads
+loadUsers();
+
+
 // Save users to file
 function saveUsers() {
     const xhr = new XMLHttpRequest();
@@ -43,3 +66,5 @@ document.getElementById('signup-form').addEventListener('submit', (e) => {
         document.getElementById('signup-error').innerHTML = 'Please fill all fields.';
     }
 });
+
+
