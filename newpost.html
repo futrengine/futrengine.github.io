@@ -22,26 +22,42 @@
         </div>
     </div>
     <script>
-        const submitPost = document.getElementById('submit-post');
-        const postTitleInput = document.getElementById('post-title');
-        const postContent = document.getElementById('post-content');
+const submitPost = document.getElementById('submit-post');
+const postContent = document.getElementById('post-content');
 
-        submitPost.addEventListener('click', () => {
-            const postTitle = postTitleInput.value;
-            const postText = postContent.value;
+submitPost.addEventListener('click', async () => {
+  const postTitle = document.querySelector('.post-title').textContent;
+  const postText = postContent.value;
 
-            const newPost = {
-                title: postTitle,
-                content: postText,
-                timestamp: Date.now()
-            };
+  // Create a new blog post object
+  const newPost = {
+    title: postTitle,
+    content: postText,
+  };
 
-            const posts = JSON.parse(localStorage.getItem('posts')) || [];
-            posts.unshift(newPost);
-            localStorage.setItem('posts', JSON.stringify(posts));
+  try {
+    const response = await fetch('https://api.github.com/repos/devourdevil/devourdevil.github.io/contents/data/blog-posts.json', {
+      method: 'PUT',
+      headers: {
+        'Authorization': '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',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newPost),
+    });
 
-            window.location.href = 'index.html';
-        });
+    if (response.ok) {
+      // Clear the form
+      postContent.value = '';
+
+      // Redirect to home page
+      window.location.href = 'index.html';
+    } else {
+      throw new Error('Error creating blog post');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
     </script>
 </body>
 </html>
