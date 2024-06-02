@@ -22,6 +22,8 @@
         </div>
     </div>
     <script>
+
+        
 const submitPost = document.getElementById('submit-post');
 const postContent = document.getElementById('post-content');
 
@@ -36,16 +38,27 @@ submitPost.addEventListener('click', async () => {
   };
 
   try {
-    const response = await fetch('https://api.github.com/repos/devourdevil/devourdevil.github.io/contents/data/blog-posts.json', {
-      method: 'PUT',
+    // Get the current file contents and sha
+    const response = await fetch('https://api.github.com/repos/devourdevil/devourdevil.github.io/contents/data/blog-posts.json');
+    const fileData = await response.json();
+    const sha = fileData.sha;
+
+    // Update the file contents
+    const updateResponse = await fetch(`https://api.github.com/repos/devourdevil/devourdevil.github.io/contents/data/blog-posts.json`, {
+      method: 'PATCH',
       headers: {
-        'Authorization': 'Bearer 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',
+        'Authorization': 'Bearer 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',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(newPost),
+      body: JSON.stringify({
+        message: 'Update blog post',
+        content: JSON.stringify(newPost),
+        sha,
+        branch: 'ain', // or the branch you want to update
+      }),
     });
 
-    if (response.ok) {
+    if (updateResponse.ok) {
       // Clear the form
       postContent.value = '';
 
