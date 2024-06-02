@@ -73,11 +73,11 @@ document.getElementById('home-link').addEventListener('click', () => {
 });
 
 document.getElementById('signup-link').addEventListener('click', () => {
-    window.location.href = 'ignup.html';
+    window.location.href = 'signup.html';
 });
 
 document.getElementById('signin-link').addEventListener('click', () => {
-    window.location.href = 'ignin.html';
+    window.location.href = 'signin.html';
 });
 
 
