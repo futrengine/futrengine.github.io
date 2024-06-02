@@ -1,67 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const signUpForm = document.getElementById('sign-up-form');
-    const signInForm = document.getElementById('sign-in-form');
-    const newPostForm = document.getElementById('new-post-form');
+    const signupBtn = document.getElementById('signup-btn');
+    const signinBtn = document.getElementById('signin-btn');
+    const signoutBtn = document.getElementById('signout-btn');
     const newPostLink = document.getElementById('new-post-link');
-    const blogPostsSection = document.getElementById('blog-posts');
     const newPostSection = document.getElementById('new-post');
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const newPostForm = document.getElementById('new-post-form');
+    const blogPostsSection = document.getElementById('blog-posts');
 
-    // Toggle new post section visibility
-    newPostLink.addEventListener('click', function() {
-        if (isUserLoggedIn()) {
-            newPostSection.classList.add('active');
-            blogPostsSection.classList.remove('active');
-        } else {
-            alert('You need to sign in to post a blog.');
-        }
+    function isUserLoggedIn() {
+        return !!localStorage.getItem('loggedInUser');
+    }
+
+    function getLoggedInUser() {
+        return JSON.parse(localStorage.getItem('loggedInUser'));
+    }
+
+    if (!isUserLoggedIn()) {
+        signoutBtn.style.display = 'none';
+        newPostLink.style.display = 'none';
+    } else {
+        signupBtn.style.display = 'none';
+        signinBtn.style.display = 'none';
+        signoutBtn.style.display = 'inline-block';
+        newPostLink.style.display = 'inline-block';
+    }
+
+    signoutBtn.addEventListener('click', function() {
+        localStorage.removeItem('loggedInUser');
+        window.location.reload();
     });
 
-    // Handle sign-up form submission
-    if (signUpForm) {
-        signUpForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const country = document.getElementById('country').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+    newPostLink.addEventListener('click', function() {
+        newPostSection.style.display = 'block';
+        blogPostsSection.style.display = 'none';
+    });
 
-            if (password !== confirmPassword) {
-                alert('Passwords do not match.');
-                return;
-            }
-
-            const newUser = { name, email, phone, country, password };
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-            alert('User signed up successfully!');
-            signUpForm.reset();
-            window.location.href = 'signin.html';
-        });
-    }
-
-    // Handle sign-in form submission
-    if (signInForm) {
-        signInForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            const user = users.find(user => user.email === username && user.password === password);
-            if (user) {
-                localStorage.setItem('loggedInUser', JSON.stringify(user));
-                alert('User signed in successfully!');
-                signInForm.reset();
-                window.location.href = 'index.html';
-            } else {
-                alert('Invalid username or password.');
-            }
-        });
-    }
-
-    // Handle new post form submission
     if (newPostForm) {
         newPostForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -89,18 +62,54 @@ document.addEventListener('DOMContentLoaded', function() {
             postSection.appendChild(newPost);
 
             newPostForm.reset();
-            newPostSection.classList.remove('active');
-            blogPostsSection.classList.add('active');
+            newPostSection.style.display = 'none';
+            blogPostsSection.style.display = 'block';
         });
     }
 
-    // Check if a user is logged in
-    function isUserLoggedIn() {
-        return !!localStorage.getItem('loggedInUser');
+    const signupForm = document.getElementById('sign-up-form');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match');
+                return;
+            }
+
+            const user = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                country: document.getElementById('country').value,
+                password: password
+            };
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+        });
     }
 
-    // Get the logged-in user's details
-    function getLoggedInUser() {
-        return JSON.parse(localStorage.getItem('loggedInUser'));
+    const signinForm = document.getElementById('sign-in-form');
+    if (signinForm) {
+        signinForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email === username && u.password === password);
+
+            if (user) {
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+                window.location.href = 'index.html';
+            } else {
+                alert('Invalid credentials');
+            }
+        });
     }
 });
