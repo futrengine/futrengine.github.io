@@ -81,3 +81,42 @@ document.getElementById('signin-link').addEventListener('click', () => {
 });
 
 
+document.addEventListener("DOMContentLoaded", function() {
+    const signinBtn = document.getElementById("signin-btn");
+    const signupBtn = document.getElementById("signup-btn");
+    const signinPopup = document.getElementById("signin-popup");
+    const signupPopup = document.getElementById("signup-popup");
+    const signinLink = document.getElementById("signin-link");
+    const signupLink = document.getElementById("signup-link");
+
+    signinBtn.addEventListener("click", function() {
+        signinPopup.style.display = "block";
+    });
+
+    signupBtn.addEventListener("click", function() {
+        signupPopup.style.display = "block";
+    });
+
+    signinLink.addEventListener("click", function() {
+        signinPopup.style.display = "none";
+        signupPopup.style.display = "block";
+    });
+
+    signupLink.addEventListener("click", function() {
+        signinPopup.style.display = "block";
+        signupPopup.style.display = "none";
+    });
+
+    window.addEventListener("click", function(event) {
+        if (event.target === signinPopup || event.target === signupPopup) {
+            signinPopup.style.display = "none";
+            signupPopup.style.display = "none";
+        }
+    });
+});
+
+
+
+
+
+      
