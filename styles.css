@@ -27,3 +27,13 @@ nav {
 .nav-button:hover {
     background-color: #333333;
 }
+
+.nav-button.signin {
+    background-color: #007bff;
+}
+.nav-button.signup {
+    background-color: #28a745;
+}
+.nav-button.signout {
+    background-color: #dc3545;
+}
