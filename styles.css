@@ -11,34 +11,44 @@ body {
     background-color: #f8f8f8;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
+.container {
+    max-width: 400px;
+    margin: 100px auto;
     padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
     text-align: center;
 }
 
-nav ul {
-    list-style-type: none;
+form input {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #fff;
-}
-
-main {
-    padding: 20px;
-}
-
-footer {
+form button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
     background-color: #333;
     color: #fff;
-    padding: 10px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #555;
+}
+
+p {
+    margin-top: 15px;
     text-align: center;
 }
