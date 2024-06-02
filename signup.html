@@ -11,28 +11,22 @@
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="signup.html">Sign Up</a></li>
                 <li><a href="signin.html">Sign In</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <div class="signup-container">
-            <div class="bg-image"></div>
-            <div class="signup-form">
-                <h1>Sign Up</h1>
-                <form id="signup-form">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username"><br><br>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password"><br><br>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email"><br><br>
-                    <input type="submit" value="Sign Up">
-                </form>
-                <div id="signup-error"></div>
-            </div>
-        </div>
+        <h1>Sign Up</h1>
+        <form id="signup-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email"><br><br>
+            <button id="signup-submit">Sign Up</button>
+            <div id="signup-error"></div>
+        </form>
     </main>
     <script src="script.js"></script>
 </body>
