@@ -68,3 +68,16 @@ document.getElementById('signup-form').addEventListener('submit', (e) => {
 });
 
 
+document.getElementById('home-link').addEventListener('click', () => {
+    window.location.href = 'index.html';
+});
+
+document.getElementById('signup-link').addEventListener('click', () => {
+    window.location.href = 'ignup.html';
+});
+
+document.getElementById('signin-link').addEventListener('click', () => {
+    window.location.href = 'ignin.html';
+});
+
+
