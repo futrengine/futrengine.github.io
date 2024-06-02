@@ -17,8 +17,8 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-image: url('background-image.jpg'); /* replace with your background image */
+    height: 100vh; /* Set the height to 100vh to cover the entire screen */
+    background-image: url('background-image.jpg'); /* Replace with your background image URL */
     background-size: cover;
     background-position: center;
     filter: blur(5px);
