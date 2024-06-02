@@ -26,6 +26,11 @@ const submitPost = document.getElementById('submit-post');
 const postContent = document.getElementById('post-content');
 
 submitPost.addEventListener('click', async () => {
+
+    const submitPost = document.getElementById('submit-post');
+const postContent = document.getElementById('post-content');
+
+submitPost.addEventListener('click', async () => {
   const postTitle = document.querySelector('.post-title').textContent;
   const postText = postContent.value;
 
@@ -35,14 +40,26 @@ submitPost.addEventListener('click', async () => {
     content: postText,
   };
 
+  const token = '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';
+  const encodedToken = btoa(`token:${token}`);
+  const headers = {
+    'Authorization': `Basic ${encodedToken}`,
+    'Content-Type': 'application/json',
+  };
+
+  const filePath = 'data/blog-posts.json';
+  const repoOwner = 'devourdevil';
+  const repoName = 'devourdevil.github.io';
+
   try {
-    const response = await fetch('https://api.github.com/repos/devourdevil/devourdevil.github.io/contents/data/blog-posts.json', {
+    const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
       method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer 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',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newPost),
+      headers,
+      body: JSON.stringify({
+        message: 'Update blog post',
+        content: JSON.stringify(newPost),
+        branch: 'main', // or the branch you want to update
+      }),
     });
 
     if (response.ok) {
@@ -56,6 +73,7 @@ submitPost.addEventListener('click', async () => {
     }
   } catch (error) {
     console.error('Error:', error);
+    alert(`Error creating blog post: ${error.message}`);
   }
 });
     </script>
