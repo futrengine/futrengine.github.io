@@ -85,3 +85,29 @@ input[type="submit"]:hover {
     background-color: #444;
 }
 
+
+button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+#home-btn {
+    background-color: #4CAF50; /* green */
+}
+
+#signup-btn {
+    background-color: #FF9800; /* orange */
+}
+
+#signin-btn {
+    background-color: #2196F3; /* blue */
+}
+
