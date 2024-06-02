@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Post</title>
-    <link rel="stylesheet" href="stylesn.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="post-box">
             <h1 class="post-title">New Post</h1>
+            <div class="post-title-input">
+                <input type="text" id="post-title" placeholder="Enter post title">
+            </div>
             <div class="post-content">
                 <textarea id="post-content" placeholder="Write your post here..."></textarea>
             </div>
@@ -18,10 +21,11 @@
     </div>
     <script>
         const submitPost = document.getElementById('submit-post');
+        const postTitleInput = document.getElementById('post-title');
         const postContent = document.getElementById('post-content');
 
         submitPost.addEventListener('click', () => {
-            const postTitle = document.querySelector('.post-title').textContent;
+            const postTitle = postTitleInput.value;
             const postText = postContent.value;
 
             const newPost = {
