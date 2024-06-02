@@ -12,9 +12,10 @@
         <nav>
             <ul>
                 <li><a href="index.html" class="button">Home</a></li>
-                <li><a href="signup.html" class="button">Sign Up</a></li>
-                <li><a href="signin.html" class="button">Sign In</a></li>
-                <li><a href="#" id="new-post-link" class="button">New Post</a></li>
+                <li><a href="signup.html" class="button" id="signup-btn">Sign Up</a></li>
+                <li><a href="signin.html" class="button" id="signin-btn">Sign In</a></li>
+                <li><a href="#" id="signout-btn" class="button" style="display:none;">Sign Out</a></li>
+                <li><a href="#" id="new-post-link" class="button" style="display:none;">New Post</a></li>
             </ul>
         </nav>
     </header>
@@ -25,7 +26,7 @@
             <!-- Blog posts will be dynamically added here -->
         </section>
 
-        <section id="new-post" class="form-section">
+        <section id="new-post" class="form-section" style="display:none;">
             <h2>New Post</h2>
             <form id="new-post-form">
                 <label for="post-title">Title:</label>
