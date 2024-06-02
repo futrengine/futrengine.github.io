@@ -86,3 +86,20 @@ document.getElementById('new-post-btn').addEventListener('click', () => {
     window.location.href = 'newpost.html';
 });
                                                         
+// Display blog posts on home page
+const postList = document.getElementById('post-list');
+const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+posts.forEach((post) => {
+    const postListItem = document.createElement('li');
+    postListItem.textContent = post.title;
+    postListItem.dataset.postContent = post.content;
+    postList.appendChild(postListItem);
+});
+
+postList.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+        const postContent = e.target.dataset.postContent;
+        alert(postContent); // Display full post content in an alert box
+    }
+});
