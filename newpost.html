@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Post</title>
-    <link rel="stylesheet" href="stylesn.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -16,6 +16,26 @@
             <button class="btn" id="submit-post">Publish</button>
         </div>
     </div>
-    <script src="scriptn.js"></script>
+    <script>
+        const submitPost = document.getElementById('submit-post');
+        const postContent = document.getElementById('post-content');
+
+        submitPost.addEventListener('click', () => {
+            const postTitle = document.querySelector('.post-title').textContent;
+            const postText = postContent.value;
+
+            const newPost = {
+                title: postTitle,
+                content: postText,
+                timestamp: Date.now()
+            };
+
+            const posts = JSON.parse(localStorage.getItem('posts')) || [];
+            posts.unshift(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
