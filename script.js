@@ -78,4 +78,11 @@ document.getElementById('signup-link').addEventListener('click', () => {
     document.getElementById('signin-popup').classList.remove('active');
 });
 
+
+
 loadUsers();
+
+document.getElementById('new-post-btn').addEventListener('click', () => {
+    window.location.href = 'newpost.html';
+});
+                                                        
