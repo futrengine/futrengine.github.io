@@ -70,3 +70,18 @@ input[type="submit"]:hover {
     font-size: 14px;
     margin-top: 10px;
 }
+
+
+.nav-btn {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.nav-btn:hover {
+    background-color: #444;
+}
+
