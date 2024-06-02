@@ -19,7 +19,6 @@
     <main>
         <h1>Welcome to our blog!</h1>
         <section id="blog-posts">
-            <!-- blog posts will be displayed here -->
             <ul id="post-list"></ul>
         </section>
     </main>
@@ -29,6 +28,23 @@
     <div id="signup-popup" class="popup">
         <!-- Sign Up popup content here -->
     </div>
-    <script src="script.js"></script>
+    <script>
+        const postList = document.getElementById('post-list');
+        const posts = JSON.parse(localStorage.getItem('posts')) || [];
+
+        posts.forEach((post) => {
+            const postListItem = document.createElement('li');
+            postListItem.textContent = post.title;
+            postListItem.dataset.postContent = post.content;
+            postList.appendChild(postListItem);
+        });
+
+        postList.addEventListener('click', (e) => {
+            if (e.target.tagName === 'LI') {
+                const postContent = e.target.dataset.postContent;
+                alert(postContent);
+            }
+        });
+    </script>
 </body>
 </html>
