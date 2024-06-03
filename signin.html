@@ -7,20 +7,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="bg-image"></div>
-    <div class="container">
-        <div class="box">
-            <h1>Sign In</h1>
-            <form id="signin-form">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username"><br><br>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password"><br><br>
-                <button id="signin-submit" class="btn">Sign In</button>
-                <div id="signin-error"></div>
-            </form>
-        </div>
-    </div>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="newpost.html">New Post</a></li>
+                <li><a href="#" id="signup-link">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Sign In</h1>
+        <form id="signin-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username"><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Sign In">
+        </form>
+        <p id="signin-error"></p>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
