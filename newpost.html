@@ -1,47 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8673570286288888"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Post</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="post-box">
-            <h1 class="post-title">New Post</h1>
-            <div class="post-title-input">
-                <input type="text" id="post-title" placeholder="Enter post title">
-            </div>
-            <div class="post-content">
-                <textarea id="post-content" placeholder="Write your post here..."></textarea>
-            </div>
-            <button class="btn" id="submit-post">Publish</button>
-        </div>
-    </div>
-    <script>
-        const submitPost = document.getElementById('submit-post');
-        const postTitleInput = document.getElementById('post-title');
-        const postContent = document.getElementById('post-content');
-
-        submitPost.addEventListener('click', () => {
-            const postTitle = postTitleInput.value;
-            const postText = postContent.value;
-
-            const newPost = {
-                title: postTitle,
-                content: postText,
-                timestamp: Date.now()
-            };
-
-            const posts = JSON.parse(localStorage.getItem('posts')) || [];
-            posts.unshift(newPost);
-            localStorage.setItem('posts', JSON.stringify(posts));
-
-            window.location.href = 'index.html';
-        });
-    </script>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="signin.html">Sign In</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>New Post</h1>
+        <form>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title"><br><br>
+            <label for="content">Content:</label>
+            <textarea id="content" name="content"></textarea><br><br>
+            <input type="submit" value="Create Post">
+        </form>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
