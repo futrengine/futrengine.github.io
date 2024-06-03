@@ -12,19 +12,7 @@ async function loadUsers() {
   }
 }
 
-// Save users to file
-async function saveUsers() {
-  try {
-    const response = await fetch('users.txt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(users),
-    });
-    console.log('Users saved successfully!');
-  } catch (error) {
-    console.error('Error saving users:', error);
-  }
-}
+
 
 // Sign in and sign up functionality
 const signInForm = document.getElementById('signin-form');
@@ -114,3 +102,62 @@ postList.addEventListener('click', (e) => {
 document.getElementById('new-post-btn').addEventListener('click', () => {
   window.location.href = 'newpost.html';
 });
+
+// Global variables
+let users = [];
+
+// Load users from file
+async function loadUsers() {
+  try {
+    const response = await fetch('users.txt');
+    const userData = await response.json();
+    users = userData;
+  } catch (error) {
+    console.error('Error loading users:', error);
+  }
+}
+
+// Save users to file
+async function saveUsers() {
+  try {
+    const response = await fetch('users.txt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(users),
+    });
+    console.log('Users saved successfully!');
+  } catch (error) {
+    console.error('Error saving users:', error);
+  }
+}
+
+// Sign up functionality
+const signUpForm = document.getElementById('signup-form');
+const signUpError = document.getElementById('signup-error');
+
+// Handle sign-up form submission
+async function handleSignUpSubmit() {
+  signUpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (!username || !email || !password) {
+      signUpError.innerHTML = 'Please enter a username, email, and password.';
+      return;
+    }
+
+    const newUser = { username, email, password };
+    users.push(newUser);
+    await saveUsers();
+    console.log('Signed up successfully!');
+    window.location.href = 'index.html';
+  });
+}
+
+// Initialize sign-up functionality
+handleSignUpSubmit();
+
+// Load users when the script is loaded
+loadUsers();
