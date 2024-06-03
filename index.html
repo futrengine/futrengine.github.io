@@ -13,8 +13,8 @@
         <nav>
             <ul>
                 <li><a href="newpost.html">New Post</a></li>
-                <li><a href="#" id="signin-btn">Sign In</a></li>
-                <li><a href="#" id="signup-btn">Sign Up</a></li>
+                <li><a href="signin.html" id="signin-btn">Sign In</a></li>
+                <li><a href="signup.html" id="signup-btn">Sign Up</a></li>
             </ul>
         </nav>
     </header>
@@ -49,6 +49,17 @@
                 const postContent = e.target.dataset.postContent;
                 alert(postContent);
             }
+        });
+
+        // Add event listeners for the Sign In and Sign Up buttons
+        document.getElementById('signin-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'signin.html';
+        });
+
+        document.getElementById('signup-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'signup.html';
         });
     </script>
 </body>
