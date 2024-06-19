@@ -1,3 +1,5 @@
+// script.js
+
 document.getElementById('donateButton').addEventListener('click', function() {
     redirectToCashfree();
 });
