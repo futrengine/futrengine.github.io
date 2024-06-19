@@ -43,6 +43,11 @@ nav ul li a:hover {
     color: #0056b3;
 }
 
+.logo img {
+    width: 100px;
+    margin: 20px 0;
+}
+
 h1 {
     font-size: 2em;
     margin-bottom: 20px;
