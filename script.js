@@ -9,7 +9,7 @@ document.getElementById('donateButton').addEventListener('click', function() {
 
 function redirectToCashfree(amount) {
     // Cashfree payment gateway URL (replace with actual payment gateway URL)
-    const cashfreeURL = 'https://test.cashfree.com/billpay/checkout/post/submit'; // Replace with your actual Cashfree payment link
+    const cashfreeURL = 'https://payments.cashfree.com/forms/donateme'; // Replace with your actual Cashfree payment link
 
     // Create a form dynamically and submit it
     const form = document.createElement('form');
