@@ -3,8 +3,8 @@ import com.cashfree.models.*;
 
 public class CashfreeIntegration {
     public static void main(String[] args) {
-        Cashfree.XClientId = "YOUR_CLIENT_KEY";
-        Cashfree.XClientSecret = "YOUR_CLIENT_SECRET_KEY";
+        Cashfree.XClientId = "TEST1021531814f967785c578f2107e081351201";
+        Cashfree.XClientSecret = "cfsk_ma_test_5ea0697a93ed1bb0a15435d85268f769_82945472";
         Cashfree.XEnvironment = Cashfree.SANDBOX;
 
         createOrder(1.0, "123", "9999999999", "test@example.com");
