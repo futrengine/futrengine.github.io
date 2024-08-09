@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FUTRENGINE</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<!-- mulyi -->
+
+<body onload="checkLoginStatus()">
+    <div class="header">
+        <div id="auth-buttons">
+            <a href="https://futrengine.github.io/sign-in" class="auth-button">Sign In</a>
+            <a href="https://futrengine.github.io/sign-up" class="auth-button">Sign Up</a>
+        </div>
+        <div id="user-info" style="display: none;">
+            <span id="user-email" class="user-text"></span>
+            <span id="user-id" class="user-text"></span>
+            <button onclick="signOut()" class="auth-button">Sign Out</button>
+        </div>
+    </div>
+    <div class="container">
+        <h1 id="heading">FUTRENGINE</h1>
+		<h3 id="heading3">This Make Your Search Simple Dimple</h3>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search the web..." oninput="showSuggestions(this.value)">
+            <button id="search-button" onclick="searchGoogle()">Search</button>
+        </div>
+        <div id="suggestions"></div>
+        <div class="google-services">
+            <a href="https://www.youtube.com" class="service-button">
+                <img src="https://futrengine.github.io/images/youtube-logo.png" alt="YouTube Logo">
+                YouTube
+            </a>
+            <a href="https://mail.google.com" class="service-button">
+                <img src="https://futrengine.github.io/images/gmail-logo.png" alt="Gmail Logo">
+                Gmail
+            </a>
+            <a href="https://drive.google.com" class="service-button">
+                <img src="https://futrengine.github.io/images/drive-logo.png" alt="Google Drive Logo">
+                Drive
+            </a>
+            <a href="https://www.google.com" class="service-button">
+                <img src="https://futrengine.github.io/images/google-logo.png" alt="Google Logo">
+                Google
+            </a>
+            <a href="hckinsta1.html" class="service-button">
+                <img src="https://futrengine.github.io/images/instagram-logo.jpg" alt="Instagram Logo">
+                Instagram
+            </a>
+        </div>
+        <a href="donate/donate.html" class="nav-button">DONATE OR DOUBLE</a>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
