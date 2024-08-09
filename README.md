@@ -28,8 +28,7 @@ License
 This code is protected by copyright and may not be used without permission. If you would like to use this code for any purpose, please contact the copyright holder to obtain permission.
 
 Contact
-If you have any questions or comments about this code, please contact the copyright holder at contact@example.com.
-
+If you have any questions or comments about this code, please contact the copyright holder at ztenkammu@gmail.com.
 Footer
 
 Edit
