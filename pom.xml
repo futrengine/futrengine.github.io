@@ -1,5 +1,0 @@
-<dependency>
-    <groupId>com.cashfree</groupId>
-    <artifactId>cashfree-sdk</artifactId>
-    <version>1.0.0</version>
-</dependency>
