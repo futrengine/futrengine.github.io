@@ -1,6 +1,6 @@
 const GITHUB_REPO = 'futrengine/sigcred';
 const GITHUB_API_URL = `https://api.github.com/repos/${GITHUB_REPO}/contents/users.json`;
-const GITHUB_TOKEN = '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'; // Create a personal access token from GitHub
+const GITHUB_TOKEN = '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'; // Create a personal access token from GitHub
 
 // Function to get the content of the users.json file from GitHub
 async function fetchUserData() {
