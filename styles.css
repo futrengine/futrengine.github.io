@@ -38,7 +38,6 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-
 h1 {
     color: red;
 }
@@ -121,35 +120,6 @@ h1 {
 }
 
 .nav-button:hover {
-    background-color: #0056A2;
-}
-
-.form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.form-container input {
-    margin: 10px 0;
-    padding: 10px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.form-container button {
-    padding: 10px 20px;
-    background-color: #0074D9;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.form-container button:hover {
     background-color: #0056A2;
 }
 
