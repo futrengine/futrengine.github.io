@@ -4,6 +4,10 @@
     font-family: Arial, sans-serif;
     animation: fadeIn 2s;
 }
+.time{
+    color: red;
+    
+}
 
 @keyframes fadeIn {
     from { opacity: 0; }
