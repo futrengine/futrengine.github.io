@@ -1,13 +1,14 @@
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const milliseconds = now.getMilliseconds();
 
-
-// Replace 'your_timezone' as 'asia?kolakat with the desired time zone
-const timezone = 'Asia/Kolkata';
-
-function displayTime() {
-    const now = new Date();
-    const options = { timeZone: timezone };
-    const formattedTime = now.toLocaleTimeString('en-US', options);
-    document.getElementById('time').textContent = formattedTime;
+  document.querySelector('.hours').textContent = hours;
+  document.querySelector('.minutes').textContent = minutes;
+  document.querySelector('.seconds').textContent = seconds;
+  document.querySelector('.milliseconds').textContent = milliseconds.toString().padStart(3, '0');
 }
 
-setInterval(displayTime, 1000); // Update time every second
+setInterval(updateClock, 10); // Update every 10 milliseconds
