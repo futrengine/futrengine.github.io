@@ -1,7 +1,7 @@
 
 
 // Replace 'your_timezone' with the desired time zone
-const timezone = 'India/Kolkata';
+const timezone = 'Asia/Kolkata';
 
 function displayTime() {
     const now = new Date();
