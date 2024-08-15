@@ -1,6 +1,6 @@
 
 
-// Replace 'your_timezone' with the desired time zone
+// Replace 'your_timezone' as 'asia?kolakat with the desired time zone
 const timezone = 'Asia/Kolkata';
 
 function displayTime() {
