@@ -20,6 +20,16 @@ body {
 }
 
 /* Header */
+
+@media screen and (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+
 .header {
     position: absolute;
     top: 0;
@@ -44,6 +54,15 @@ body {
     background: linear-gradient(45deg, #ff4b2b, #ff416c);
 }
 
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+    }
+}
+
 /* Modern Container */
 .container {
     max-width: 90%;
@@ -62,6 +81,18 @@ h1 {
 }
 
 /* Modern Search Bar */
+
+@media screen and (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+    }
+    #search-button {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+
+
 /* Modern Search Bar */
 .search-container {
     margin-top: 20px;
@@ -121,6 +152,19 @@ h1 {
 
 #search-button:hover {
     transform: scale(1.1);
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+    .google-services {
+        flex-direction: column;
+        align-items: center;
+    }
+    .service-button {
+        width: 90%;
+    }
 }
 
 
