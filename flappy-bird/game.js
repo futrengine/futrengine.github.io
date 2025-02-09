@@ -27,13 +27,15 @@ function create() {
     this.add.image(0, 0, 'bg').setOrigin(0, 0);
 
     // Bird
-    bird = this.physics.add.sprite(100, 300, 'bird').setScale(0.7);
+    bird = this.physics.add.sprite(100, 300, 'bird').setScale(0.5); // Reduce size
     bird.setCollideWorldBounds(true);
 
     // Pipes
-    pipes = this.physics.add.group();
-    this.time.addEvent({ delay: 1500, callback: addPipes, callbackScope: this, loop: true });
-
+    pipes = this.physics.add.group({
+        allowGravity: false,  // Pipes don’t fall
+        immovable: true, // Pipes stay fixed
+});
+this.time.addEvent({ delay: 1500, callback: addPipes, callbackScope: this, loop: true });
     // Sounds
     bgMusic = this.sound.add('bgm', { loop: true, volume: 0.5 });
     jumpSound = this.sound.add('jump', { volume: 1.0 });
@@ -61,7 +63,7 @@ function update() {
 
 function jump() {
     if (!isGameOver) {
-        bird.setVelocityY(-300);
+        bird.setVelocityY(-350); // Increase jump height
         jumpSound.play();
     }
 }
@@ -69,12 +71,13 @@ function jump() {
 function addPipes() {
     if (isGameOver) return;
 
-    var pipeY = Phaser.Math.Between(150, 450);
-    var upperPipe = pipes.create(400, pipeY - 200, 'pipe').setFlipY(true);
-    var lowerPipe = pipes.create(400, pipeY + 200, 'pipe');
+    var pipeY = Phaser.Math.Between(180, 400); // Make sure pipes are not too high or low
+    var upperPipe = pipes.create(400, pipeY - 230, 'pipe').setFlipY(true).setScale(0.6); // Adjust upper pipe
+    var lowerPipe = pipes.create(400, pipeY + 230, 'pipe').setScale(0.6); // Adjust lower pipe
 
-    pipes.setVelocityX(-200);
+    pipes.setVelocityX(-200); // Keep pipes moving at the same speed
 
+    // Ensure pipes are destroyed when off-screen
     pipes.children.iterate(function(pipe) {
         if (pipe.x < -50) {
             pipe.destroy();
