@@ -71,24 +71,28 @@ function searchGoogle() {
 }
 
 // Function to generate a 6-digit personal ID
-function generatePersonalID() {
+function generateUserID() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 // Function to sign up
 function signUp() {
+    const name = document.getElementById('sign-up-name').value;
+    const phone = document.getElementById('sign-up-phone').value;
     const email = document.getElementById('sign-up-email').value;
     const password = document.getElementById('sign-up-password').value;
     const messageElement = document.getElementById('sign-up-message');
 
-    if (email && password) {
-        const personalID = generatePersonalID();
-        const userData = { email: email, password: password, personalID: personalID };
+    if (name && phone && email && password) {
+        const userData = { name, phone, email, password, userID: generateUserID() };
         localStorage.setItem(email, JSON.stringify(userData));
+        localStorage.setItem(phone, JSON.stringify(userData));
+
         messageElement.textContent = 'Sign Up Successful!';
         messageElement.style.color = 'green';
+
         setTimeout(() => {
-            window.location.href = 'sign-in.html'; // Redirect to sign-in page after successful sign-up
+            window.location.href = 'sign-in.html';
         }, 1000);
     } else {
         messageElement.textContent = 'Please fill in all fields.';
@@ -98,21 +102,22 @@ function signUp() {
 
 // Function to sign in
 function signIn() {
-    const email = document.getElementById('sign-in-email').value;
+    const identifier = document.getElementById('sign-in-identifier').value;
     const password = document.getElementById('sign-in-password').value;
     const messageElement = document.getElementById('sign-in-message');
 
-    const storedData = JSON.parse(localStorage.getItem(email));
+    const storedData = JSON.parse(localStorage.getItem(identifier));
 
     if (storedData && storedData.password === password) {
-        sessionStorage.setItem('loggedInUser', email); // Store login status in sessionStorage
+        sessionStorage.setItem('loggedInUser', identifier);
         messageElement.textContent = 'Sign In Successful!';
         messageElement.style.color = 'green';
+
         setTimeout(() => {
-            window.location.href = 'index.html'; // Redirect to main page after successful sign-in
+            window.location.href = 'index.html';
         }, 1000);
     } else {
-        messageElement.textContent = 'Incorrect email or password.';
+        messageElement.textContent = 'Invalid credentials. Please sign up first!';
         messageElement.style.color = 'red';
     }
 }
@@ -127,8 +132,8 @@ function checkLoginStatus() {
         const userData = JSON.parse(localStorage.getItem(loggedInUser));
         authButtons.style.display = 'none';
         userInfo.style.display = 'block';
-        document.getElementById('user-email').textContent = `Welcome, ${userData.email}`;
-        document.getElementById('user-id').textContent = `Personal ID: ${userData.personalID}`;
+        document.getElementById('user-email').textContent = `Welcome, ${userData.name}`;
+        document.getElementById('user-id').textContent = `ID: ${userData.userID}`;
     } else {
         authButtons.style.display = 'flex';
         userInfo.style.display = 'none';
@@ -138,8 +143,11 @@ function checkLoginStatus() {
 // Function to sign out
 function signOut() {
     sessionStorage.removeItem('loggedInUser');
-    window.location.href = 'index.html'; // Redirect to main page after sign-out
+    window.location.href = 'index.html';
 }
+
+// Ensure login status is checked on page load
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
 
 document.getElementById("search-input").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
