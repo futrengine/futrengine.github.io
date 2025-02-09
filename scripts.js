@@ -31,6 +31,25 @@ function showSuggestions(value) {
                 suggestions.appendChild(suggestionElement);
             }
         });
+document.getElementById("search-input").addEventListener("focus", function() {
+    this.style.transition = "0.3s";
+    this.style.boxShadow = "0px 0px 10px rgba(255, 65, 108, 0.5)";
+});
+
+document.getElementById("search-input").addEventListener("blur", function() {
+    this.style.boxShadow = "none";
+});
+
+document.querySelectorAll(".service-button").forEach(button => {
+    button.addEventListener("mouseover", () => {
+        button.style.transform = "scale(1.1)";
+    });
+    button.addEventListener("mouseleave", () => {
+        button.style.transform = "scale(1)";
+    });
+});        
+        
+        
 
         suggestions.style.display = 'block';
     } else {
@@ -121,3 +140,10 @@ function signOut() {
     sessionStorage.removeItem('loggedInUser');
     window.location.href = 'index.html'; // Redirect to main page after sign-out
 }
+
+document.getElementById("search-input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        searchGoogle();
+    }
+});
+
