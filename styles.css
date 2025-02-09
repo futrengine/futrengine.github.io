@@ -8,7 +8,7 @@
 /* Fullscreen Background Image */
 body {
     font-family: 'Poppins', sans-serif;
-    background: url('/home/jachu/Documents/prog/Sengine/futrengine.github.io/images/background.png') no-repeat center center fixed;
+    background: url('futrengine.github.io/images/background.png') no-repeat center center fixed;
     background-size: cover;
     color: white;
     display: flex;
