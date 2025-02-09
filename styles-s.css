@@ -1,0 +1,148 @@
+/* Modern Input Fields */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://futrengine.github.io/images/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+/* Header */
+
+@media screen and (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+
+.header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+    }
+}
+
+/* Modern Container */
+.container {
+    max-width: 90%;
+    width: 500px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Heading */
+h1 {
+    color: #ff416c;
+}
+
+
+
+
+
+
+#search-input {
+    padding: 12px;
+    width: 250px;
+    max-width: 80%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    font-size: 16px;
+    transition: all 0.4s ease-in-out;
+    background: rgba(255, 255, 255, 0.2);
+    color: black;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#search-input:focus {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0px 0px 15px rgba(255, 65, 108, 0.5);
+    text-align: left;
+    padding-left: 15px;
+}
+
+/* Search Button Styles (Apply to Sign-In/Sign-Up Buttons) */
+#search-button {
+    padding: 12px 20px;
+    border: none;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: black;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+#search-button:hover {
+    transform: scale(1.1);
+}
+
+/* Apply Search Bar Styles to Auth Inputs */
+.auth-input {
+    padding: 12px;
+    width: 250px;
+    max-width: 80%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    font-size: 16px;
+    transition: all 0.4s ease-in-out;
+    background: rgba(255, 255, 255, 0.2);
+    color: black;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+}
+
+.auth-input:focus {
+    width: 320px;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0px 0px 15px rgba(255, 65, 108, 0.5);
+    text-align: left;
+    padding-left: 15px;
+}
+
+/* Apply Search Button Styles to Auth Buttons */
+.auth-button {
+    padding: 12px 20px;
+    border: none;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: black;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+.auth-button:hover {
+    transform: scale(1.1);
+}
+
