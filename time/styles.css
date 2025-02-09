@@ -1,3 +1,23 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+    overflow: hidden;
+}
+
+.text {
+    font-size: 50px; /* Bigger Font */
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(270deg, red, blue, green, yellow);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientAnimation 3s infinite linear;
+}
 .time-container {
     text-align: center;
     font-size: 24px;
@@ -12,4 +32,10 @@
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
