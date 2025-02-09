@@ -140,6 +140,7 @@ h1 {
     cursor: pointer;
     font-size: 16px;
     transition: 0.3s ease-in-out;
+    text-decoration: none;
 }
 
 .auth-button:hover {
