@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Hack Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container" id="homePage">
+        <h2>Social Media Hack Tool</h2>
+        <p>Select a platform:</p>
+        <button onclick="goToPage('Google')">Google</button>
+        <button onclick="goToPage('Instagram')">Instagram</button>
+        <button onclick="goToPage('WhatsApp')">WhatsApp</button>
+        <button onclick="goToPage('Facebook')">Facebook</button>
+        <button onclick="goToPage('Twitter')">Twitter</button>
+        <button onclick="goToPage('Dev-KamarJahan')">Dev-KamarJahan</button>
+    </div>
+
+    <div class="container" id="inputPage" style="display: none;">
+        <h2 id="platformName"></h2>
+        <p id="inputLabel">Enter Target Username:</p>
+        <input type="text" id="username" placeholder="Enter username">
+        <button onclick="startHacking()">Start Hacking</button>
+    </div>
+
+    <div id="loadingScreen" class="loading" style="display: none;">
+        <p>Hacking in progress...</p>
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+    </div>
+
+    <div class="container" id="resultPage" style="display: none;">
+        <h2>Hacked Account Details</h2>
+        <p id="hackedDetails"></p>
+        <button id="redirectButton" onclick="redirect()">Go to Website</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
