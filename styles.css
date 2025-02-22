@@ -37,7 +37,6 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 15px 20px;
-    background: rgba(0, 0, 0, 0.7);
 }
 
 .auth-button {
