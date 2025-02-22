@@ -55,11 +55,13 @@ nav ul li a:hover {
 h1 {
     font-size: 2em;
     margin-bottom: 20px;
+    color: white;
 }
 
 p {
     font-size: 1.2em;
     margin-bottom: 30px;
+    color: white;
 }
 
 button {
