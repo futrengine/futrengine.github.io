@@ -272,33 +272,4 @@ h1 {
 }
 
 
-h5 {
-    font-size: 10px; /* Bigger Font */
-    font-weight: bold;
-    text-transform: uppercase;
-    background: linear-gradient(270deg, red, blue, green, yellow);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: gradientAnimation 3s infinite linear;
-}
-.time-container {
-    text-align: center;
-    font-size: 10px;
-    font-family: Arial, sans-serif;
-    animation: fadeIn 2s;
-}
-.time{
-    color: red;
-    
-}
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes gradientAnimation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
