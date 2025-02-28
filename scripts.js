@@ -155,3 +155,36 @@ document.getElementById("search-input").addEventListener("keypress", function(ev
     }
 });
 
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const container = document.getElementById("shortcut-container");
+    const toggleButton = document.getElementById("next-button");
+    let currentPage = 0;
+    const totalPages = 2;
+
+    function showPage(page) {
+        const offset = page * -50;
+        container.style.transition = "transform 0.3s ease-in-out";
+        container.style.transform = `translateX(${offset}%)`;
+
+        // Change button text based on current page
+        if (page === totalPages - 1) {
+            toggleButton.textContent = "Previous";
+        } else {
+            toggleButton.textContent = "Next";
+        }
+    }
+
+    toggleButton.addEventListener("click", function () {
+        if (currentPage === totalPages - 1) {
+            currentPage = 0; // Go back to first page
+        } else {
+            currentPage = 1; // Move to next page
+        }
+        showPage(currentPage);
+    });
+
+    showPage(0);
+});
+
