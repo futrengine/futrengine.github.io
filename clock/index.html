@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Clock</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Web Clock</h1>
+        <div id="clock"></div>
+
+        <div class="tabs">
+            <button class="tab-button" id="alarm-tab">Alarm</button>
+            <button class="tab-button" id="timer-tab">Timer</button>
+            <button class="tab-button" id="stopwatch-tab">Stopwatch</button>
+        </div>
+
+        <!-- Alarm Section -->
+        <div id="alarm" class="tab-content">
+            <h2>Set Alarm</h2>
+            <input type="time" id="alarm-time">
+            <button id="set-alarm">Set Alarm</button>
+            <button id="clear-alarm">Clear</button>
+            <p id="alarm-message"></p>
+        </div>
+
+        <!-- Timer Section -->
+        <div id="timer" class="tab-content">
+            <h2>Countdown Timer</h2>
+            <input type="number" id="timer-minutes" placeholder="Minutes">
+            <input type="number" id="timer-seconds" placeholder="Seconds">
+            <button id="start-timer">Start</button>
+            <button id="reset-timer">Reset</button>
+            <p id="timer-display">00:00</p>
+        </div>
+
+        <!-- Stopwatch Section -->
+        <div id="stopwatch" class="tab-content">
+            <h2>Stopwatch</h2>
+            <p id="stopwatch-display">00:00.00</p>
+            <button id="start-stopwatch">Start</button>
+            <button id="pause-stopwatch">Pause</button>
+            <button id="reset-stopwatch">Reset</button>
+        </div>
+    </div>
+
+    <audio id="alarm-sound" src="time-up.mp3"></audio>
+    <script src="scripts.js"></script>
+</body>
+</html>
