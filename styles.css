@@ -67,7 +67,7 @@ body {
 .container {
     max-width: 90%;
     width: 500px;
-    padding: 30px;
+    padding: 10px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(15px);
     border-radius: 20px;
@@ -171,9 +171,8 @@ h1 {
 /* Google Services */
 .google-services {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+    width: 200%; /* Ensures both pages fit correctly */
+    transition: transform 0.3s ease-in-out; /* Fast and smooth slide */
 }
 
 .service-button {
@@ -272,4 +271,40 @@ h1 {
 }
 
 
+
+.google-services-wrapper {
+    text-align: center;
+    margin-top: 20px;
+    overflow: hidden;
+    width: 100%;
+}
+
+
+
+
+.shortcut-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 50%; /* Each page takes up 50% of the container */
+    flex-shrink: 0;
+}
+
+#next-button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+
+#next-button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+}
 
