@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Generate a Redirect URL</h2>
+    <input type="text" id="longUrl" placeholder="Enter URL (e.g. https://example.com)" size="40">
+    <input type="text" id="alias" placeholder="Enter Alias (e.g. mylink)" size="20">
+    <button onclick="generateRedirect()">Generate URL</button>
+
+    <p id="result"></p>
+
+    <script>
+        function generateRedirect() {
+            let url = document.getElementById("longUrl").value;
+            let alias = document.getElementById("alias").value;
+            if (!url || !alias) {
+                alert("Please enter both a URL and an alias.");
+                return;
+            }
+
+            let encodedUrl = encodeURIComponent(url);
+            let redirectPage = `<html>
+<head>
+<meta http-equiv="refresh" content="0; url='${url}'">
+<script>window.location.href = "${url}";</script>
+</head>
+<body>
+<p>Redirecting to <a href="${url}">${url}</a>...</p>
+</body>
+</html>`;
+
+            let blob = new Blob([redirectPage], { type: "text/html" });
+            let fileUrl = URL.createObjectURL(blob);
+
+            document.getElementById("result").innerHTML = 
+                `Shortened URL: <a href="${fileUrl}" target="_blank">${fileUrl}</a>`;
+        }
+    </script>
+
+</body>
+</html>
