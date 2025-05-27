@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>FutrEngine URL Shortener 2</title>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    input, button { padding: 10px; width: 300px; margin: 10px 0; }
-  </style>
+  <link rel="stylesheet" href="styles-s.css" />
 </head>
 <body>
-  <h2>🔗 FutrEngine URL Shortener</h2>
+  <div class="container">
+    <h2>🔗 FutrEngine URL Shortener</h2>
 
-  <input type="url" id="longUrl" placeholder="Paste your long URL" required><br>
-  <input type="text" id="customAlias" placeholder="Enter custom alias (e.g. mylink)" required><br>
-  <button onclick="shorten()">Shorten</button>
+    <input type="url" id="longUrl" class="auth-input" placeholder="Paste your long URL" required />
+    <input type="text" id="customAlias" class="auth-input" placeholder="Enter custom alias (e.g. mylink)" required />
+    <button onclick="shorten()" class="auth-button">Shorten</button>
 
-  <p id="result"></p>
+    <p id="result"></p>
+  </div>
 
-  <!-- ✅ Firebase v9 Compatible via UMD for browser (non-module) -->
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
@@ -28,7 +28,7 @@
       projectId: "futrshortener-7acf0",
       storageBucket: "futrshortener-7acf0.appspot.com",
       messagingSenderId: "863839648409",
-      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608",
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -60,7 +60,6 @@
               resultBox.innerText = "❌ Failed to save. Try again.";
             } else {
               const shortUrl = `${location.origin}/file/?alias=${alias}`;
-
               resultBox.innerHTML = `✅ Your short link: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
             }
           });
