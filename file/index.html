@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Redirecting...</title>
+  <title>Redirecting... 1</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
@@ -22,16 +22,22 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const alias = location.pathname.split("/").pop(); // e.g. "hi"
+    // Get alias from query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const alias = urlParams.get('alias');
 
-    db.ref("links/" + alias).once("value").then(snapshot => {
-      if (snapshot.exists()) {
-        const url = snapshot.val().url;
-        window.location.href = url;
-      } else {
-        document.body.innerHTML = "<h2>❌ Link not found.</h2>";
-      }
-    });
+    if (!alias) {
+      document.body.innerHTML = "<h2>❌ No alias provided.</h2>";
+    } else {
+      db.ref("links/" + alias).once("value").then(snapshot => {
+        if (snapshot.exists()) {
+          const url = snapshot.val().url;
+          window.location.href = url;
+        } else {
+          document.body.innerHTML = "<h2>❌ Link not found.</h2>";
+        }
+      });
+    }
   </script>
 </body>
 </html>
