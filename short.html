@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FutrEngine URL Shortener</title>
+</head>
+<body>
+  <h2>🔗 FutrEngine URL Shortener</h2>
+  <form id="shortenerForm">
+    <input type="url" id="longUrl" placeholder="Enter long URL" required><br>
+    <input type="text" id="customAlias" placeholder="Custom alias (e.g. mylink)" required><br>
+    <button type="submit">Shorten</button>
+  </form>
+  <p id="result"></p>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
