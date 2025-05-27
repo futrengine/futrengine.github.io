@@ -6,9 +6,12 @@
 <body>
   <p>🔄 Redirecting...</p>
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
+
   <script>
+    // 🔧 REPLACE THIS with your Firebase config:
     const firebaseConfig = {
   apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
   authDomain: "futrshortener-7acf0.firebaseapp.com",
@@ -22,12 +25,12 @@
     const db = firebase.database();
 
     const alias = location.pathname.split("/").pop();
-    db.ref("links/" + alias).once("value", snapshot => {
+    db.ref("links/" + alias).once("value", (snapshot) => {
       if (snapshot.exists()) {
         const longUrl = snapshot.val().url;
-        location.href = longUrl;
+        window.location.href = longUrl;
       } else {
-        document.body.innerHTML = "<h2>❌ Alias not found</h2>";
+        document.body.innerHTML = "<h2>❌ Link not found.</h2>";
       }
     });
   </script>
