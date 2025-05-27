@@ -9,28 +9,23 @@
 </head>
 <body>
   <h2>🔗 FutrEngine URL Shortener</h2>
-
-  <input type="url" id="longUrl" placeholder="Paste your long URL" required><br>
-  <input type="text" id="customAlias" placeholder="Enter custom alias (e.g. mylink)" required><br>
+  <input type="url" id="longUrl" placeholder="Paste your long URL"><br>
+  <input type="text" id="customAlias" placeholder="Enter custom alias"><br>
   <button onclick="shorten()">Shorten</button>
-
   <p id="result"></p>
 
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
-
   <script>
-    // 🔧 REPLACE THIS with your Firebase config:
-const firebaseConfig = {
-  apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
-  authDomain: "futrshortener-7acf0.firebaseapp.com",
-  databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
-  projectId: "futrshortener-7acf0",
-  storageBucket: "futrshortener-7acf0.appspot.com",
-  messagingSenderId: "863839648409",
-  appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+      authDomain: "futrshortener-7acf0.firebaseapp.com",
+      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
+      projectId: "futrshortener-7acf0",
+      storageBucket: "futrshortener-7acf0.appspot.com",
+      messagingSenderId: "863839648409",
+      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+    };
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -40,20 +35,25 @@ const firebaseConfig = {
       const alias = document.getElementById("customAlias").value.trim();
       const resultBox = document.getElementById("result");
 
+      if (!longUrl || !alias) {
+        resultBox.innerText = "❌ Both fields are required.";
+        return;
+      }
+
       if (!alias.match(/^[a-zA-Z0-9_-]+$/)) {
-        resultBox.innerText = "❌ Alias must contain only letters, numbers, _ or -";
+        resultBox.innerText = "❌ Alias must be alphanumeric.";
         return;
       }
 
       const ref = db.ref("links/" + alias);
 
-      ref.once("value", (snapshot) => {
+      ref.once("value").then(snapshot => {
         if (snapshot.exists()) {
-          resultBox.innerText = "❌ Alias already taken. Try another.";
+          resultBox.innerText = "❌ Alias already taken.";
         } else {
-          ref.set({ url: longUrl }, (error) => {
-            if (error) {
-              resultBox.innerText = "❌ Failed to save. Try again.";
+          ref.set({ url: longUrl }, err => {
+            if (err) {
+              resultBox.innerText = "❌ Error saving to Firebase.";
             } else {
               resultBox.innerHTML = `✅ Your short link: <a href="file/${alias}" target="_blank">${location.origin}/file/${alias}</a>`;
             }
