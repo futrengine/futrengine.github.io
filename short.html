@@ -17,15 +17,18 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
-      authDomain: "futrshortener-7acf0.firebaseapp.com",
-      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
-      projectId: "futrshortener-7acf0",
-      storageBucket: "futrshortener-7acf0.appspot.com",
-      messagingSenderId: "863839648409",
-      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+    authDomain: "futrshortener-7acf0.firebaseapp.com",
+    databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com", // ✅ required
+    projectId: "futrshortener-7acf0",
+    storageBucket: "futrshortener-7acf0.appspot.com",
+    messagingSenderId: "863839648409",
+    appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
