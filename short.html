@@ -59,7 +59,8 @@
             if (error) {
               resultBox.innerText = "❌ Failed to save. Try again.";
             } else {
-              const shortUrl = `${location.origin}/file/${alias}`;
+              const shortUrl = `${location.origin}/file/?alias=${alias}`;
+
               resultBox.innerHTML = `✅ Your short link: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
             }
           });
