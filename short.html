@@ -2,18 +2,64 @@
 <html>
 <head>
   <title>FutrEngine URL Shortener</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { padding: 10px; width: 300px; margin: 10px 0; }
+  </style>
 </head>
 <body>
   <h2>🔗 FutrEngine URL Shortener</h2>
-  <form id="shortenerForm">
-    <input type="url" id="longUrl" placeholder="Enter long URL" required><br>
-    <input type="text" id="customAlias" placeholder="Custom alias (e.g. mylink)" required><br>
-    <button type="submit">Shorten</button>
-  </form>
+
+  <input type="url" id="longUrl" placeholder="Paste your long URL" required><br>
+  <input type="text" id="customAlias" placeholder="Enter custom alias (e.g. mylink)" required><br>
+  <button onclick="shorten()">Shorten</button>
+
   <p id="result"></p>
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"></script>
-  <script src="scriptstep.js"></script>
+
+  <script>
+    // 🔧 REPLACE THIS with your Firebase config:
+    const firebaseConfig = {
+  apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+  authDomain: "futrshortener-7acf0.firebaseapp.com",
+  projectId: "futrshortener-7acf0",
+  storageBucket: "futrshortener-7acf0.firebasestorage.app",
+  messagingSenderId: "863839648409",
+  appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+};
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function shorten() {
+      const longUrl = document.getElementById("longUrl").value.trim();
+      const alias = document.getElementById("customAlias").value.trim();
+      const resultBox = document.getElementById("result");
+
+      if (!alias.match(/^[a-zA-Z0-9_-]+$/)) {
+        resultBox.innerText = "❌ Alias must contain only letters, numbers, _ or -";
+        return;
+      }
+
+      const ref = db.ref("links/" + alias);
+
+      ref.once("value", (snapshot) => {
+        if (snapshot.exists()) {
+          resultBox.innerText = "❌ Alias already taken. Try another.";
+        } else {
+          ref.set({ url: longUrl }, (error) => {
+            if (error) {
+              resultBox.innerText = "❌ Failed to save. Try again.";
+            } else {
+              resultBox.innerHTML = `✅ Your short link: <a href="file/${alias}" target="_blank">${location.origin}/file/${alias}</a>`;
+            }
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>
