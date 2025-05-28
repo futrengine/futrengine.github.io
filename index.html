@@ -13,12 +13,15 @@
 <body onload="checkLoginStatus()">
     <div class="header">
         <div id="auth-buttons">
+            <!-- Sign In & Sign Up -->
             <a href="https://futrengine.github.io/sign-in" class="auth-button">Sign In</a>
             <a href="https://futrengine.github.io/sign-up" class="auth-button">Sign Up</a>
+            
+            <!-- 👇 Newly Positioned Buttons -->
             <a href="https://form.typeform.com/to/pPfmKzPe" class="auth-button">Service Request</a>
-            <!-- ✅ New URL SHORTER button added below -->
             <a href="https://futrengine.github.io" class="auth-button">URL SHORTER</a>
         </div>
+
         <div id="user-info" style="display: none;">
             <span id="user-email" class="user-text"></span>
             <span id="user-id" class="user-text"></span>
@@ -29,6 +32,7 @@
     <div class="container">
         <h1 id="heading">FUTRENGINE</h1>
         <h3 id="heading3">This Makes Your Search Simple Dimple</h3>
+
         <div class="search-container">
             <input type="text" id="search-input" placeholder="🔍 Search anything..." oninput="showSuggestions(this.value)">
             <button id="search-button" onclick="searchGoogle()">Search</button>
@@ -37,7 +41,7 @@
 
         <div class="google-services-wrapper">
             <div class="google-services" id="shortcut-container">
-                <!-- Page 1 -->
+                <!-- Shortcut Pages -->
                 <div class="shortcut-page">
                     <a href="https://www.youtube.com" class="service-button">
                         <img src="https://futrengine.github.io/images/youtube-logo.png" alt="YouTube Logo">
@@ -48,7 +52,7 @@
                         <span>Gmail</span>
                     </a>
                     <a href="https://drive.google.com" class="service-button">
-                        <img src="https://futrengine.github.io/images/drive-logo.png" alt="Google Drive Logo">
+                        <img src="https://futrengine.github.io/images/drive-logo.png" alt="Drive Logo">
                         <span>Drive</span>
                     </a>
                     <a href="https://www.google.com" class="service-button">
@@ -77,7 +81,6 @@
                     </a>
                 </div>
 
-                <!-- Page 2 -->
                 <div class="shortcut-page">
                     <a href="https://chatgpt.com" class="service-button">
                         <img src="https://futrengine.github.io/images/gpt.jpeg" alt="GPT Logo">
