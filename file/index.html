@@ -1,12 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Redirecting... 1</title>
+  <title>Redirecting...</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: sans-serif;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .msg { font-size: 18px; }
+  </style>
+
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
-  <p>⏳ Redirecting...</p>
+  <div class="loader"></div>
+  <div class="msg">⏳ Redirecting...</div>
 
   <script>
     const firebaseConfig = {
@@ -22,20 +51,34 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Get alias from query string
     const urlParams = new URLSearchParams(window.location.search);
     const alias = urlParams.get('alias');
 
+    function showError(message) {
+      document.querySelector('.loader').style.display = "none";
+      document.querySelector('.msg').innerHTML = `❌ ${message}`;
+    }
+
     if (!alias) {
-      document.body.innerHTML = "<h2>❌ No alias provided.</h2>";
+      showError("No alias provided.");
     } else {
       db.ref("links/" + alias).once("value").then(snapshot => {
         if (snapshot.exists()) {
-          const url = snapshot.val().url;
-          window.location.href = url;
+          const data = snapshot.val();
+          const now = Date.now();
+
+          if (data.expiry && now > data.expiry) {
+            showError("This link has expired. 🕒");
+          } else {
+            const newClicks = (data.clicks || 0) + 1;
+            db.ref("links/" + alias + "/clicks").set(newClicks);
+            window.location.href = data.url;
+          }
         } else {
-          document.body.innerHTML = "<h2>❌ Link not found.</h2>";
+          showError("Link not found. 🔍 It might have been deleted or never existed.");
         }
+      }).catch(() => {
+        showError("Something went wrong. Try again later.");
       });
     }
   </script>
