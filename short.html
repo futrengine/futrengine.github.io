@@ -11,7 +11,15 @@
 
     <input type="url" id="longUrl" class="auth-input" placeholder="Paste your long URL" required />
     <input type="text" id="customAlias" class="auth-input" placeholder="Enter custom alias (e.g. mylink)" required />
-    <button onclick="shorten()" class="auth-button">Shorten</button>
+    
+    <select id="expiry" class="auth-input">
+      <option value="none">No Limit</option>
+      <option value="1h">1 Hour</option>
+      <option value="1d">1 Day</option>
+      <option value="7d">7 Days</option>
+    </select>
+
+    <button onclick="shorten()" class="auth-button">Create Short Link</button>
 
     <p id="result"></p>
   </div>
@@ -34,9 +42,20 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    function getExpiryTimestamp(option) {
+      const now = Date.now();
+      switch (option) {
+        case '1h': return now + 3600000;
+        case '1d': return now + 86400000;
+        case '7d': return now + 604800000;
+        default: return null; // No limit
+      }
+    }
+
     function shorten() {
       const longUrl = document.getElementById("longUrl").value.trim();
       const alias = document.getElementById("customAlias").value.trim();
+      const expiryOption = document.getElementById("expiry").value;
       const resultBox = document.getElementById("result");
 
       if (!longUrl || !alias) {
@@ -55,7 +74,15 @@
         if (snapshot.exists()) {
           resultBox.innerText = "❌ Alias already taken. Try another.";
         } else {
-          ref.set({ url: longUrl }, (error) => {
+          const expiryTime = getExpiryTimestamp(expiryOption);
+          const data = {
+            url: longUrl,
+            createdAt: Date.now(),
+            expiry: expiryTime || null,
+            clicks: 0
+          };
+
+          ref.set(data, (error) => {
             if (error) {
               resultBox.innerText = "❌ Failed to save. Try again.";
             } else {
