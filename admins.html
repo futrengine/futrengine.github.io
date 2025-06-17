@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+    button { padding: 5px 10px; margin: 2px; }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body>
+  <h2>🔐 Admin Dashboard - URL Overview</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Alias</th>
+        <th>Long URL</th>
+        <th>Clicks</th>
+        <th>Expiry</th>
+        <th>Short URL</th>
+        <th>QR Code</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="urlTable"></tbody>
+  </table>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+      authDomain: "futrshortener-7acf0.firebaseapp.com",
+      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
+      projectId: "futrshortener-7acf0",
+      storageBucket: "futrshortener-7acf0.appspot.com",
+      messagingSenderId: "863839648409",
+      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const tableBody = document.getElementById("urlTable");
+    const base = location.origin + "/file/?alias=";
+
+    db.ref("links").once("value").then(snapshot => {
+      const data = snapshot.val();
+      const now = Date.now();
+
+      Object.entries(data).forEach(([alias, info]) => {
+        const tr = document.createElement("tr");
+
+        const shortUrl = `${base}${alias}`;
+        const expired = info.expiry && now > info.expiry;
+        const expiryText = info.expiry ? new Date(info.expiry).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
+
+        tr.innerHTML = `
+          <td>${alias}</td>
+          <td><a href="${info.url}" target="_blank">${info.url}</a></td>
+          <td>${info.clicks || 0}</td>
+          <td>${expiryText}</td>
+          <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
+          <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
+          <td><button onclick="deleteLink('${alias}')">🗑️ Delete</button></td>
+        `;
+
+        tableBody.appendChild(tr);
+      });
+    });
+
+    function deleteLink(alias) {
+      if (confirm(`Delete link with alias "${alias}"?`)) {
+        db.ref("links/" + alias).remove().then(() => {
+          location.reload();
+        });
+      }
+    }
+  </script>
+</body>
+</html>
