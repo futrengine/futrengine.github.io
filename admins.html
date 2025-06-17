@@ -3,10 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin Dashboard - FutrEngine</title>
-  <link rel="stylesheet" href="styles-s.css" /> <!-- 👈 uses your default theme -->
+  <link rel="stylesheet" href="styles-s.css" />
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
   <style>
+    body {
+      padding: 30px;
+      font-family: Arial, sans-serif;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
@@ -18,34 +22,38 @@
       text-align: left;
     }
     .hidden { display: none; }
+    .topbar {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>🛡️ Admin Login</h2>
-    <input type="text" id="username" class="auth-input" placeholder="Username" required />
-    <input type="password" id="password" class="auth-input" placeholder="Password" required />
-    <button onclick="login()" class="auth-button">Login</button>
-    <p id="loginError" style="color:red;"></p>
 
-    <div id="dashboard" class="hidden">
+  <h2>🛡️ Admin Login</h2>
+  <input type="text" id="username" class="auth-input" placeholder="Username" required />
+  <input type="password" id="password" class="auth-input" placeholder="Password" required />
+  <button onclick="login()" class="auth-button">Login</button>
+  <p id="loginError" style="color:red;"></p>
+
+  <div id="dashboard" class="hidden">
+    <div class="topbar">
       <h2>📊 Admin Dashboard</h2>
       <button onclick="loadLinks()" class="auth-button">🔁 Refresh Links</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Alias</th>
-            <th>URL</th>
-            <th>Clicks</th>
-            <th>Expiry</th>
-            <th>Short URL</th>
-            <th>QR</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="urlTable"></tbody>
-      </table>
     </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Alias</th>
+          <th>URL</th>
+          <th>Clicks</th>
+          <th>Expiry</th>
+          <th>Short URL</th>
+          <th>QR</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="urlTable"></tbody>
+    </table>
   </div>
 
   <script>
@@ -71,7 +79,7 @@
         document.querySelector("h2").innerText = "✅ Logged in as Admin";
         document.getElementById("dashboard").classList.remove("hidden");
         errorBox.innerText = "";
-        loadLinks(); // load on login
+        loadLinks();
       } else {
         errorBox.innerText = "❌ Invalid credentials!";
       }
@@ -79,7 +87,7 @@
 
     function loadLinks() {
       const table = document.getElementById("urlTable");
-      table.innerHTML = ""; // Clear previous
+      table.innerHTML = "";
 
       db.ref("links").once("value").then(snapshot => {
         const data = snapshot.val();
