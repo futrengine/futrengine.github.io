@@ -1,12 +1,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Redirecting... 1</title>
+  <title>Redirecting...</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #f0f4f8;
+      color: #333;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 8px solid #e0e0e0;
+      border-top: 8px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .message {
+      font-size: 1.2rem;
+      text-align: center;
+    }
+
+    .create-link {
+      position: absolute;
+      bottom: 20px;
+      padding: 10px 20px;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <p>⏳ Redirecting...</p>
+  <div class="spinner"></div>
+  <div class="message">⏳ Redirecting... Please wait</div>
+  <button class="create-link" onclick="window.location.href='create.html'">Create Short Link</button>
 
   <script>
     const firebaseConfig = {
@@ -22,20 +68,47 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Get alias from query string
     const urlParams = new URLSearchParams(window.location.search);
     const alias = urlParams.get('alias');
 
+    const messageEl = document.querySelector(".message");
+
     if (!alias) {
-      document.body.innerHTML = "<h2>❌ No alias provided.</h2>";
+      messageEl.innerHTML = "❌ No alias provided.";
+      document.querySelector(".spinner").style.display = "none";
     } else {
       db.ref("links/" + alias).once("value").then(snapshot => {
         if (snapshot.exists()) {
-          const url = snapshot.val().url;
-          window.location.href = url;
+          const data = snapshot.val();
+          const url = data.url;
+          const expiry = data.expiry; // timestamp in ms or "no_limit"
+
+          const now = Date.now();
+          if (expiry !== "no_limit" && now > expiry) {
+            messageEl.innerHTML = "⛔ This link has expired.";
+            document.querySelector(".spinner").style.display = "none";
+            return;
+          }
+
+          // Update click count
+          const currentClicks = data.clicks || 0;
+          db.ref("links/" + alias).update({ clicks: currentClicks + 1 });
+
+          // Redirect
+          setTimeout(() => {
+            window.location.href = url;
+          }, 1500); // delay for UI
         } else {
-          document.body.innerHTML = "<h2>❌ Link not found.</h2>";
+          // Custom 404-style error
+          messageEl.innerHTML = `
+            🚫 <strong>404</strong> - Link not found.<br>
+            The link you tried to visit does not exist.`;
+          document.querySelector(".spinner").style.display = "none";
         }
+      }).catch(error => {
+        messageEl.textContent = "❌ Error accessing the link.";
+        console.error(error);
+        document.querySelector(".spinner").style.display = "none";
       });
     }
   </script>
