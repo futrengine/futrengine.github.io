@@ -55,6 +55,13 @@
       <tbody id="urlTable"></tbody>
     </table>
   </div>
+<div id="loginBox">
+  <h2>🛡️ Admin Login</h2>
+  <input type="text" id="username" class="auth-input" placeholder="Username" required />
+  <input type="password" id="password" class="auth-input" placeholder="Password" required />
+  <button onclick="login()" class="auth-button">Login</button>
+  <p id="loginError" style="color:red;"></p>
+</div>
 
   <script>
     const firebaseConfig = {
@@ -70,20 +77,27 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    function login() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
-      const errorBox = document.getElementById("loginError");
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  const errorBox = document.getElementById("loginError");
 
-      if (user === "Jachu21" && pass === "212007") {
-        document.querySelector("h2").innerText = "✅ Logged in as Admin";
-        document.getElementById("dashboard").classList.remove("hidden");
-        errorBox.innerText = "";
-        loadLinks();
-      } else {
-        errorBox.innerText = "❌ Invalid credentials!";
-      }
-    }
+  if (user === "Jachu21" && pass === "212007") {
+    // ✅ Hide login fields
+    document.getElementById("username").style.display = "none";
+    document.getElementById("password").style.display = "none";
+    document.querySelector("button").style.display = "none";
+    errorBox.style.display = "none";
+
+    document.querySelector("h2").innerText = "✅ Logged in as Admin";
+    document.getElementById("dashboard").classList.remove("hidden");
+    loadLinks(); // Show links
+  } else {
+    errorBox.innerText = "❌ Invalid credentials!";
+    errorBox.style.display = "block";
+  }
+}
+
 
     function loadLinks() {
       const table = document.getElementById("urlTable");
@@ -119,6 +133,9 @@
         db.ref("links/" + alias).remove().then(loadLinks);
       }
     }
+document.getElementById("loginBox").style.display = "none";
+
+    
   </script>
 </body>
 </html>
