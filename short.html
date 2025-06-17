@@ -42,6 +42,14 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✅ Link copied to clipboard!");
+  }).catch(() => {
+    alert("❌ Failed to copy. Try manually.");
+  });
+}
+
     function getExpiryTimestamp(option) {
       const now = Date.now();
       switch (option) {
@@ -87,7 +95,11 @@
               resultBox.innerText = "❌ Failed to save. Try again.";
             } else {
               const shortUrl = `${location.origin}/file/?alias=${alias}`;
-              resultBox.innerHTML = `✅ Your short link: <a href="${shortUrl}" target="_blank">${shortUrl}</a>`;
+              resultBox.innerHTML = `
+  ✅ Your short link: <a href="${shortUrl}" target="_blank">${shortUrl}</a><br>
+  <button onclick="copyToClipboard('${shortUrl}')">📋 Copy</button>
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=150x150" alt="QR Code" />
+`;
             }
           });
         }
