@@ -37,50 +37,68 @@
   <div class="loader"></div>
   <div class="msg">⏳ Redirecting...</div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
-      authDomain: "futrshortener-7acf0.firebaseapp.com",
-      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
-      projectId: "futrshortener-7acf0",
-      storageBucket: "futrshortener-7acf0.appspot.com",
-      messagingSenderId: "863839648409",
-      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
-    };
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+    authDomain: "futrshortener-7acf0.firebaseapp.com",
+    databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
+    projectId: "futrshortener-7acf0",
+    storageBucket: "futrshortener-7acf0.appspot.com",
+    messagingSenderId: "863839648409",
+    appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const alias = urlParams.get('alias');
+  const urlParams = new URLSearchParams(window.location.search);
+  const alias = urlParams.get('alias');
 
-    function showError(message) {
-      document.querySelector('.loader').style.display = "none";
-      document.querySelector('.msg').innerHTML = `❌ ${message}`;
-    }
+  const showError = (msg) => {
+    document.body.innerHTML = `<h2>❌ ${msg}</h2>`;
+  };
 
-    if (!alias) {
-      showError("No alias provided.");
-    } else {
-      db.ref("links/" + alias).once("value").then(snapshot => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const now = Date.now();
+  if (!alias) {
+    showError("No alias provided.");
+  } else {
+    db.ref("links/" + alias).once("value").then(snapshot => {
+      if (!snapshot.exists()) {
+        showError("Link not found.");
+        return;
+      }
 
-          if (data.expiry && now > data.expiry) {
-            showError("This link has expired. 🕒");
+      const data = snapshot.val();
+      const { url, password } = data;
+
+      if (!password || password === "null") {
+        // No password → Redirect immediately
+        window.location.href = url;
+      } else {
+        // Password required → Ask user
+        document.body.innerHTML = `
+          <h2>🔐 Password Required</h2>
+          <input type="password" id="pwInput" placeholder="Enter password" />
+          <button onclick="checkPassword()">Unlock</button>
+          <p id="status"></p>
+        `;
+
+        window.checkPassword = function () {
+          const userPw = document.getElementById("pwInput").value.trim();
+          const status = document.getElementById("status");
+
+          if (userPw === password) {
+            status.innerText = "✅ Correct! Redirecting...";
+            setTimeout(() => {
+              window.location.href = url;
+            }, 1000);
           } else {
-            const newClicks = (data.clicks || 0) + 1;
-            db.ref("links/" + alias + "/clicks").set(newClicks);
-            window.location.href = data.url;
+            status.innerText = "❌ Incorrect password. Try again.";
           }
-        } else {
-          showError("Link not found. 🔍 It might have been deleted or never existed.");
-        }
-      }).catch(() => {
-        showError("Something went wrong. Try again later.");
-      });
-    }
-  </script>
+        };
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
