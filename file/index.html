@@ -55,7 +55,7 @@
   const alias = urlParams.get('alias');
 
   const showError = (msg) => {
-    document.body.innerHTML = `<h2>❌ ${msg}</h2>`;
+    document.body.innerHTML = `<h2 style="color: red; text-align: center;">❌ ${msg}</h2>`;
   };
 
   if (!alias) {
@@ -74,12 +74,14 @@
         // No password → Redirect immediately
         window.location.href = url;
       } else {
-        // Password required → Ask user
+        // Password required → Styled Prompt
         document.body.innerHTML = `
-          <h2>🔐 Password Required</h2>
-          <input type="password" id="pwInput" placeholder="Enter password" />
-          <button onclick="checkPassword()">Unlock</button>
-          <p id="status"></p>
+          <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: sans-serif;">
+            <h2 style="margin-bottom: 10px;">🔐 This link is protected</h2>
+            <input type="password" id="pwInput" placeholder="Enter password" class="auth-input" style="margin-bottom: 10px; padding: 8px; width: 250px; border-radius: 5px; border: 1px solid #ccc;" />
+            <button onclick="checkPassword()" class="auth-button" style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #2f80ed; color: white; font-weight: bold;">Unlock</button>
+            <p id="status" style="margin-top: 10px; color: red;"></p>
+          </div>
         `;
 
         window.checkPassword = function () {
@@ -87,11 +89,13 @@
           const status = document.getElementById("status");
 
           if (userPw === password) {
+            status.style.color = "green";
             status.innerText = "✅ Correct! Redirecting...";
             setTimeout(() => {
               window.location.href = url;
             }, 1000);
           } else {
+            status.style.color = "red";
             status.innerText = "❌ Incorrect password. Try again.";
           }
         };
@@ -99,6 +103,7 @@
     });
   }
 </script>
+
 
 </body>
 </html>
