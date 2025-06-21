@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="styles-s.css" />
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script src="https://fpyf8.com/88/tag.min.js" data-zone="153280" async data-cfasync="false"></script>
   <style>
     body {
       padding: 30px;
@@ -22,9 +21,18 @@
       border: 1px solid #ccc;
       text-align: left;
     }
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
     .topbar {
       margin-bottom: 20px;
+    }
+    .click-details {
+      background: #f9f9f9;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -56,13 +64,6 @@
       <tbody id="urlTable"></tbody>
     </table>
   </div>
-<div id="loginBox">
-  <h2>🛡️ Admin Login</h2>
-  <input type="text" id="username" class="auth-input" placeholder="Username" required />
-  <input type="password" id="password" class="auth-input" placeholder="Password" required />
-  <button onclick="login()" class="auth-button">Login</button>
-  <p id="loginError" style="color:red;"></p>
-</div>
 
   <script>
     const firebaseConfig = {
@@ -78,53 +79,58 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-function login() {
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
-  const errorBox = document.getElementById("loginError");
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const errorBox = document.getElementById("loginError");
 
-  if (user === "Jachu21" && pass === "212007") {
-    // ✅ Hide login fields
-    document.getElementById("username").style.display = "none";
-    document.getElementById("password").style.display = "none";
-    document.querySelector("button").style.display = "none";
-    errorBox.style.display = "none";
-
-    document.querySelector("h2").innerText = "✅ Logged in as Admin";
-    document.getElementById("dashboard").classList.remove("hidden");
-    loadLinks(); // Show links
-  } else {
-    errorBox.innerText = "❌ Invalid credentials!";
-    errorBox.style.display = "block";
-  }
-}
-
+      if (user === "Jachu21" && pass === "212007") {
+        document.getElementById("username").style.display = "none";
+        document.getElementById("password").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        errorBox.style.display = "none";
+        document.querySelector("h2").innerText = "✅ Logged in as Admin";
+        document.getElementById("dashboard").classList.remove("hidden");
+        loadLinks();
+      } else {
+        errorBox.innerText = "❌ Invalid credentials!";
+        errorBox.style.display = "block";
+      }
+    }
 
     function loadLinks() {
       const table = document.getElementById("urlTable");
       table.innerHTML = "";
 
+      const now = Date.now();
+      const base = location.origin + "/file/?alias=";
+
       db.ref("links").once("value").then(snapshot => {
         const data = snapshot.val();
-        const now = Date.now();
-        const base = location.origin + "/file/?alias=";
 
         Object.entries(data || {}).forEach(([alias, info]) => {
           const shortUrl = `${base}${alias}`;
           const expired = info.expiry && now > info.expiry;
           const expiryText = info.expiry ? new Date(info.expiry).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
 
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${alias}</td>
-            <td><a href="${info.url}" target="_blank">${info.url}</a></td>
-            <td>${info.clicks || 0}</td>
-            <td>${expiryText}</td>
-            <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
-            <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
-            <td><button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button></td>
-          `;
-          table.appendChild(tr);
+          db.ref("clicks/" + alias).once("value").then(clickSnap => {
+            const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${alias}</td>
+              <td><a href="${info.url}" target="_blank">${info.url}</a></td>
+              <td>${clicks}</td>
+              <td>${expiryText}</td>
+              <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
+              <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
+              <td>
+                <button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button>
+                <button class="auth-button" onclick="showDetails('${alias}', this)">📈 Details</button>
+              </td>
+            `;
+            table.appendChild(tr);
+          });
         });
       });
     }
@@ -132,11 +138,47 @@ function login() {
     function deleteLink(alias) {
       if (confirm(`Delete link "${alias}"?`)) {
         db.ref("links/" + alias).remove().then(loadLinks);
+        db.ref("clicks/" + alias).remove(); // also delete click logs
       }
     }
-document.getElementById("loginBox").style.display = "none";
 
-    
+    function showDetails(alias, btn) {
+      const parentRow = btn.closest("tr");
+      let nextRow = parentRow.nextElementSibling;
+
+      if (nextRow && nextRow.classList.contains("details-row")) {
+        nextRow.remove(); // toggle off if already open
+        return;
+      }
+
+      db.ref("clicks/" + alias).once("value").then(snap => {
+        const data = snap.val();
+        const div = document.createElement("div");
+
+        if (!data) {
+          div.innerHTML = "<em>No clicks yet.</em>";
+        } else {
+          div.innerHTML = Object.values(data).map(click => `
+            <div class="click-details">
+              <strong>Time:</strong> ${new Date(click.timestamp).toLocaleString()}<br/>
+              <strong>Country:</strong> ${click.country || 'N/A'}<br/>
+              <strong>Region:</strong> ${click.region || 'N/A'}<br/>
+              <strong>City:</strong> ${click.city || 'N/A'}<br/>
+              <strong>IP:</strong> ${click.ip || 'N/A'}<br/>
+              <strong>Device:</strong> ${click.device || 'N/A'}
+            </div>
+          `).join("");
+        }
+
+        const row = document.createElement("tr");
+        row.className = "details-row";
+        const td = document.createElement("td");
+        td.colSpan = 7;
+        td.appendChild(div);
+        row.appendChild(td);
+        parentRow.parentNode.insertBefore(row, parentRow.nextSibling);
+      });
+    }
   </script>
 </body>
 </html>
