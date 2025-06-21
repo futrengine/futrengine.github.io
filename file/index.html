@@ -1,137 +1,139 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Wait For Redirection...</title>
+  <meta charset="UTF-8" />
+  <title>Redirecting...</title>
 
-  <!-- Monetag script -->
+  <!-- Firebase & Monetag -->
   <script src="https://fpyf8.com/88/tag.min.js" data-zone="153286" async data-cfasync="false"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-  <!-- ✅ Corrected Style -->
+  <!-- 🔮 Dual Ring Loader Styles -->
   <style>
     body {
+      margin: 0;
+      height: 100vh;
+      font-family: sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      font-family: sans-serif;
+      background: #fefefe;
+      color: #333;
     }
 
-    .loader {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #3498db;
-      border-radius: 50%;
+    .dual-ring {
       width: 60px;
       height: 60px;
-      animation: spin 1s linear infinite;
+      border: 6px solid transparent;
+      border-top: 6px solid #3498db;
+      border-bottom: 6px solid #8e44ad;
+      border-radius: 50%;
+      animation: spin-glow 1s linear infinite;
       margin-bottom: 20px;
+      box-shadow: 0 0 10px #3498db;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes spin-glow {
+      to { transform: rotate(360deg); }
     }
 
     .msg {
       font-size: 18px;
+      text-align: center;
     }
   </style>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
-  <div class="loader"></div>
-  <div class="msg">Wait For Redirection Stay happy For Jachu ⏳ </div>
+  <!-- 🌀 Loading Spinner -->
+  <div class="dual-ring"></div>
+  <div class="msg">⏳ Redirecting...</div>
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
-    authDomain: "futrshortener-7acf0.firebaseapp.com",
-    databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
-    projectId: "futrshortener-7acf0",
-    storageBucket: "futrshortener-7acf0.appspot.com",
-    messagingSenderId: "863839648409",
-    appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
-  };
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+      authDomain: "futrshortener-7acf0.firebaseapp.com",
+      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
+      projectId: "futrshortener-7acf0",
+      storageBucket: "futrshortener-7acf0.appspot.com",
+      messagingSenderId: "863839648409",
+      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+    };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const alias = urlParams.get('alias');
+    const urlParams = new URLSearchParams(window.location.search);
+    const alias = urlParams.get('alias');
 
-  const showError = (msg) => {
-    document.body.innerHTML = `<h2 style="color: red; text-align: center;">❌ ${msg}</h2>`;
-  };
+    const showError = (msg) => {
+      document.body.innerHTML = `<h2 style="color: red; text-align: center;">❌ ${msg}</h2>`;
+    };
 
-  if (!alias) {
-    showError("No alias provided.");
-  } else {
-    db.ref("links/" + alias).once("value").then(snapshot => {
-      if (!snapshot.exists()) {
-        showError("Link not found.");
-        return;
-      }
+    if (!alias) {
+      showError("No alias provided.");
+    } else {
+      db.ref("links/" + alias).once("value").then(snapshot => {
+        if (!snapshot.exists()) {
+          showError("Link not found.");
+          return;
+        }
 
-      const data = snapshot.val();
-      const { url, password } = data;
+        const data = snapshot.val();
+        const { url, password } = data;
 
-      const redirect = () => {
-        window.location.href = url;
-      };
-
-      const trackClick = () => {
-        fetch("https://ipapi.co/json/")
-          .then(res => res.json())
-          .then(ip => {
-            const clickData = {
-              timestamp: new Date().toISOString(),
-              country: ip.country_name,
-              region: ip.region,
-              city: ip.city,
-              ip: ip.ip,
-              device: navigator.userAgent
-            };
-            db.ref(`clicks/${alias}`).push(clickData).then(redirect);
-          })
-          .catch(redirect);
-      };
-
-      if (!password || password === "null") {
-        trackClick(); // ✅ track click before redirect
-      } else {
-        document.body.innerHTML = `
-          <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: sans-serif;">
-            <h2 style="margin-bottom: 10px;">🔐 This link is protected</h2>
-            <input type="password" id="pwInput" placeholder="Enter password" style="margin-bottom: 10px; padding: 8px; width: 250px; border-radius: 5px; border: 1px solid #ccc;" />
-            <button onclick="checkPassword()" style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #2f80ed; color: white; font-weight: bold;">Unlock</button>
-            <p id="status" style="margin-top: 10px; color: red;"></p>
-          </div>
-        `;
-
-        window.checkPassword = function () {
-          const userPw = document.getElementById("pwInput").value.trim();
-          const status = document.getElementById("status");
-
-          if (userPw === password) {
-            status.style.color = "green";
-            status.innerText = "✅ Correct! Redirecting...";
-            setTimeout(() => {
-              trackClick();
-            }, 2000);
-          } else {
-            status.style.color = "red";
-            status.innerText = "❌ Incorrect password. Try again.";
-          }
+        const recordClickAndRedirect = () => {
+          fetch("https://ipapi.co/json/")
+            .then(res => res.json())
+            .then(ip => {
+              const clickData = {
+                timestamp: new Date().toISOString(),
+                country: ip.country_name,
+                region: ip.region,
+                city: ip.city,
+                ip: ip.ip,
+                device: navigator.userAgent
+              };
+              db.ref(`clicks/${alias}`).push(clickData).then(() => {
+                setTimeout(() => window.location.href = url, 1000);
+              });
+            })
+            .catch(() => {
+              window.location.href = url; // fallback if IP API fails
+            });
         };
-      }
-    });
-  }
-</script>
 
+        if (!password || password === "null") {
+          recordClickAndRedirect();
+        } else {
+          // Show password prompt
+          document.body.innerHTML = `
+            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: sans-serif;">
+              <h2 style="margin-bottom: 10px;">🔐 This link is protected</h2>
+              <input type="password" id="pwInput" placeholder="Enter password" class="auth-input" style="margin-bottom: 10px; padding: 8px; width: 250px; border-radius: 5px; border: 1px solid #ccc;" />
+              <button onclick="checkPassword()" class="auth-button" style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #2f80ed; color: white; font-weight: bold;">Unlock</button>
+              <p id="status" style="margin-top: 10px; color: red;"></p>
+            </div>
+          `;
 
+          window.checkPassword = function () {
+            const userPw = document.getElementById("pwInput").value.trim();
+            const status = document.getElementById("status");
+
+            if (userPw === password) {
+              status.style.color = "green";
+              status.innerText = "✅ Correct! Redirecting...";
+              recordClickAndRedirect();
+            } else {
+              status.style.color = "red";
+              status.innerText = "❌ Incorrect password. Try again.";
+            }
+          };
+        }
+      });
+    }
+  </script>
 </body>
 </html>
