@@ -21,9 +21,7 @@
       border: 1px solid #ccc;
       text-align: left;
     }
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
     .topbar {
       margin-bottom: 20px;
     }
@@ -33,6 +31,19 @@
       padding: 10px;
       border: 1px solid #ccc;
       font-size: 14px;
+    }
+    .pagination {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .auth-button {
+      padding: 6px 12px;
+      margin: 2px;
+      background: #2d89ef;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -63,6 +74,9 @@
       </thead>
       <tbody id="urlTable"></tbody>
     </table>
+    <div class="pagination">
+      <button id="nextBtn" class="auth-button" onclick="showNextBatch()">Next</button>
+    </div>
   </div>
 
   <script>
@@ -78,6 +92,10 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
+
+    let allLinks = [];
+    let currentIndex = 0;
+    const pageSize = 5;
 
     function login() {
       const user = document.getElementById("username").value;
@@ -99,46 +117,63 @@
     }
 
     function loadLinks() {
+      db.ref("links").once("value").then(snapshot => {
+        allLinks = Object.entries(snapshot.val() || {});
+        currentIndex = 0;
+        renderBatch();
+      });
+    }
+
+    function renderBatch() {
       const table = document.getElementById("urlTable");
       table.innerHTML = "";
 
       const now = Date.now();
       const base = location.origin + "/file/?alias=";
+      const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
 
-      db.ref("links").once("value").then(snapshot => {
-        const data = snapshot.val();
+      batch.forEach(([alias, info]) => {
+        const shortUrl = `${base}${alias}`;
+        const expired = info.expiry && now > info.expiry;
+        const expiryText = info.expiry ? new Date(info.expiry).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
 
-        Object.entries(data || {}).forEach(([alias, info]) => {
-          const shortUrl = `${base}${alias}`;
-          const expired = info.expiry && now > info.expiry;
-          const expiryText = info.expiry ? new Date(info.expiry).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
+        db.ref("clicks/" + alias).once("value").then(clickSnap => {
+          const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
 
-          db.ref("clicks/" + alias).once("value").then(clickSnap => {
-            const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
-
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${alias}</td>
-              <td><a href="${info.url}" target="_blank">${info.url}</a></td>
-              <td>${clicks}</td>
-              <td>${expiryText}</td>
-              <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
-              <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
-              <td>
-                <button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button>
-                <button class="auth-button" onclick="showDetails('${alias}', this)">📈 Details</button>
-              </td>
-            `;
-            table.appendChild(tr);
-          });
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${alias}</td>
+            <td><a href="${info.url}" target="_blank">${info.url}</a></td>
+            <td>${clicks}</td>
+            <td>${expiryText}</td>
+            <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
+            <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
+            <td>
+              <button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button>
+              <button class="auth-button" onclick="showDetails('${alias}', this)">📈 Details</button>
+            </td>
+          `;
+          table.appendChild(tr);
         });
       });
+
+      // Smooth scroll to top of table
+      document.querySelector("table").scrollIntoView({ behavior: "smooth" });
+
+      // Hide Next if no more items
+      document.getElementById("nextBtn").style.display =
+        currentIndex + pageSize >= allLinks.length ? "none" : "inline-block";
+    }
+
+    function showNextBatch() {
+      currentIndex += pageSize;
+      renderBatch();
     }
 
     function deleteLink(alias) {
       if (confirm(`Delete link "${alias}"?`)) {
         db.ref("links/" + alias).remove().then(loadLinks);
-        db.ref("clicks/" + alias).remove(); // also delete click logs
+        db.ref("clicks/" + alias).remove();
       }
     }
 
@@ -147,7 +182,7 @@
       let nextRow = parentRow.nextElementSibling;
 
       if (nextRow && nextRow.classList.contains("details-row")) {
-        nextRow.remove(); // toggle off if already open
+        nextRow.remove(); // toggle off
         return;
       }
 
