@@ -78,6 +78,25 @@ setTimeout(() => {
       const { url, password } = data;
 
       if (!password || password === "null") {
+  fetch("https://ipapi.co/json/")
+    .then(res => res.json())
+    .then(ip => {
+      const clickData = {
+        timestamp: new Date().toISOString(),
+        country: ip.country_name,
+        region: ip.region,
+        city: ip.city,
+        ip: ip.ip,
+        device: navigator.userAgent
+      };
+      db.ref(`clicks/${alias}`).push(clickData).then(() => {
+        window.location.href = url;
+      });
+    })
+    .catch(() => {
+      window.location.href = url; // Fallback redirect if IP API fails
+    });
+}
         // No password → Redirect immediately
         window.location.href = url;
       } else {
@@ -99,9 +118,28 @@ setTimeout(() => {
           if (userPw === password) {
             status.style.color = "green";
             status.innerText = "✅ Correct! Redirecting...";
-            setTimeout(() => {
-              window.location.href = url;
-            }, 8000);
+            fetch("https://ipapi.co/json/")
+  .then(res => res.json())
+  .then(ip => {
+    const clickData = {
+      timestamp: new Date().toISOString(),
+      country: ip.country_name,
+      region: ip.region,
+      city: ip.city,
+      ip: ip.ip,
+      device: navigator.userAgent
+    };
+    db.ref(`clicks/${alias}`).push(clickData).then(() => {
+      setTimeout(() => {
+        window.location.href = url;
+      }, 5000);
+    });
+  })
+  .catch(() => {
+    setTimeout(() => {
+      window.location.href = url;
+    }, 5000);
+  });
           } else {
             status.style.color = "red";
             status.innerText = "❌ Incorrect password. Try again.";
