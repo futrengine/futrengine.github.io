@@ -38,7 +38,6 @@
   <div class="msg">⏳ Redirecting...</div>
 
 <script>
-  
   const firebaseConfig = {
     apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
     authDomain: "futrshortener-7acf0.firebaseapp.com",
@@ -48,12 +47,6 @@
     messagingSenderId: "863839648409",
     appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
   };
-
-  const monetagLink = "https://otieu.com/4/9474952";
-
-setTimeout(() => {
-  window.location.href = monetagLink + "?next=" + encodeURIComponent(url);
-}, 2000);
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
@@ -77,38 +70,37 @@ setTimeout(() => {
       const data = snapshot.val();
       const { url, password } = data;
 
-      if (!password || password === "null") {
-  fetch("https://ipapi.co/json/")
-    .then(res => res.json())
-    .then(ip => {
-      const clickData = {
-        timestamp: new Date().toISOString(),
-        country: ip.country_name,
-        region: ip.region,
-        city: ip.city,
-        ip: ip.ip,
-        device: navigator.userAgent
+      const redirect = () => {
+        window.location.href = url;
       };
-      db.ref(`clicks/${alias}`).push(clickData).then(() => {
-        window.location.href = url;
-      });
-    })
-    .catch(() => {
-      window.location.href = url; // Fallback redirect if IP API fails
-    });
-}
-        // No password → Redirect immediately
-        window.location.href = url;
+
+      const trackClick = () => {
+        fetch("https://ipapi.co/json/")
+          .then(res => res.json())
+          .then(ip => {
+            const clickData = {
+              timestamp: new Date().toISOString(),
+              country: ip.country_name,
+              region: ip.region,
+              city: ip.city,
+              ip: ip.ip,
+              device: navigator.userAgent
+            };
+            db.ref(`clicks/${alias}`).push(clickData).then(redirect);
+          })
+          .catch(redirect);
+      };
+
+      if (!password || password === "null") {
+        trackClick(); // ✅ track click before redirect
       } else {
-        // Password required → Styled Prompt
         document.body.innerHTML = `
           <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: sans-serif;">
             <h2 style="margin-bottom: 10px;">🔐 This link is protected</h2>
-            <input type="password" id="pwInput" placeholder="Enter password" class="auth-input" style="margin-bottom: 10px; padding: 8px; width: 250px; border-radius: 5px; border: 1px solid #ccc;" />
-            <button onclick="checkPassword()" class="auth-button" style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #2f80ed; color: white; font-weight: bold;">Unlock</button>
+            <input type="password" id="pwInput" placeholder="Enter password" style="margin-bottom: 10px; padding: 8px; width: 250px; border-radius: 5px; border: 1px solid #ccc;" />
+            <button onclick="checkPassword()" style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #2f80ed; color: white; font-weight: bold;">Unlock</button>
             <p id="status" style="margin-top: 10px; color: red;"></p>
           </div>
-          
         `;
 
         window.checkPassword = function () {
@@ -118,28 +110,9 @@ setTimeout(() => {
           if (userPw === password) {
             status.style.color = "green";
             status.innerText = "✅ Correct! Redirecting...";
-            fetch("https://ipapi.co/json/")
-  .then(res => res.json())
-  .then(ip => {
-    const clickData = {
-      timestamp: new Date().toISOString(),
-      country: ip.country_name,
-      region: ip.region,
-      city: ip.city,
-      ip: ip.ip,
-      device: navigator.userAgent
-    };
-    db.ref(`clicks/${alias}`).push(clickData).then(() => {
-      setTimeout(() => {
-        window.location.href = url;
-      }, 5000);
-    });
-  })
-  .catch(() => {
-    setTimeout(() => {
-      window.location.href = url;
-    }, 5000);
-  });
+            setTimeout(() => {
+              trackClick();
+            }, 2000);
           } else {
             status.style.color = "red";
             status.innerText = "❌ Incorrect password. Try again.";
