@@ -39,6 +39,7 @@
   <div class="msg">⏳ Redirecting...</div>
 
 <script>
+  
   const firebaseConfig = {
     apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
     authDomain: "futrshortener-7acf0.firebaseapp.com",
@@ -48,6 +49,12 @@
     messagingSenderId: "863839648409",
     appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
   };
+
+  const monetagLink = "https://otieu.com/4/9474952";
+
+setTimeout(() => {
+  window.location.href = monetagLink + "?next=" + encodeURIComponent(url);
+}, 2000);
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
@@ -83,6 +90,10 @@
             <button onclick="checkPassword()" class="auth-button" style="padding: 8px 16px; border: none; border-radius: 5px; background-color: #2f80ed; color: white; font-weight: bold;">Unlock</button>
             <p id="status" style="margin-top: 10px; color: red;"></p>
           </div>
+          <div style="margin-top: 20px;">
+  <!-- Monetag native/banner ad script -->
+  <script src="https://fpyf8.com/88/tag.min.js" data-zone="153280" async></script>
+</div>
         `;
 
         window.checkPassword = function () {
@@ -94,7 +105,7 @@
             status.innerText = "✅ Correct! Redirecting...";
             setTimeout(() => {
               window.location.href = url;
-            }, 1000);
+            }, 4000);
           } else {
             status.style.color = "red";
             status.innerText = "❌ Incorrect password. Try again.";
