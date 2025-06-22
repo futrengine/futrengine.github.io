@@ -2,111 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>FutrEngine URL Shortener V1</title>
-  <link rel="stylesheet" href="styles-s.css" />
+  <title>FutrEngine Shortener 2.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
   <script src="https://fpyf8.com/88/tag.min.js" data-zone="153280" async data-cfasync="false"></script>
 </head>
 <body>
-  <div class="container">
-    <h2>🔗 Shorten Your Long Url For Free</h2>
+  <div class="main-container">
+    <h1 class="title">🔗 FutrEngine 2.0 URL Shortener</h1>
 
-    <input type="url" id="longUrl" class="auth-input" placeholder="Paste your long URL" required />
-    <input type="text" id="customAlias" class="auth-input" placeholder="Enter custom alias (e.g. mylink)" required />
-    <input type="password" id="linkPassword" class="auth-input" placeholder="Enter password (optional)" />
+    <div class="shortener-box glass">
+      <input type="url" id="longUrl" placeholder="Paste your long URL" class="input" />
+      <input type="text" id="customAlias" placeholder="Custom alias (e.g. mylink)" class="input" />
+      <input type="password" id="linkPassword" placeholder="Password (optional)" class="input" />
+      
+      <div class="expiry-wrapper">
+        <select id="expiry" class="input">
+          <option value="none">No Limit</option>
+          <option value="1h">1 Hour</option>
+          <option value="1d">1 Day</option>
+          <option value="7d">7 Days</option>
+        </select>
+        <input type="datetime-local" id="customExpiry" class="input" placeholder="Custom expiry (optional)" />
+      </div>
 
-    
-    <select id="expiry" class="auth-input">
-      <option value="none">No Limit</option>
-      <option value="1h">1 Hour</option>
-      <option value="1d">1 Day</option>
-      <option value="7d">7 Days</option>
-    </select>
+      <button onclick="shorten()" class="button pulse">✨ Create Short Link</button>
+    </div>
 
-    <button onclick="shorten()" class="auth-button">Create Short Link</button>
-
-    <p id="result"></p>
+    <div id="result" class="result-box"></div>
   </div>
 
-  <!-- Firebase Scripts -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
-      authDomain: "futrshortener-7acf0.firebaseapp.com",
-      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
-      projectId: "futrshortener-7acf0",
-      storageBucket: "futrshortener-7acf0.appspot.com",
-      messagingSenderId: "863839648409",
-      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608",
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(() => {
-    alert("✅ Link copied to clipboard!");
-  }).catch(() => {
-    alert("❌ Failed to copy. Try manually.");
-  });
-}
-
-    function getExpiryTimestamp(option) {
-      const now = Date.now();
-      switch (option) {
-        case '1h': return now + 3600000;
-        case '1d': return now + 86400000;
-        case '7d': return now + 604800000;
-        default: return null; // No limit
-      }
-    }
-
-function shorten() {
-  const longUrl = document.getElementById("longUrl").value.trim();
-  const alias = document.getElementById("customAlias").value.trim();
-  const password = document.getElementById("linkPassword").value.trim();
-  const resultBox = document.getElementById("result");
-
-  if (!longUrl || !alias) {
-    resultBox.innerText = "❌ Please enter both URL and alias.";
-    return;
-  }
-
-  if (!alias.match(/^[a-zA-Z0-9_-]+$/)) {
-    resultBox.innerText = "❌ Alias must contain only letters, numbers, _ or -";
-    return;
-  }
-
-  const ref = db.ref("links/" + alias);
-
-  ref.once("value").then((snapshot) => {
-    if (snapshot.exists()) {
-      resultBox.innerText = "❌ Alias already taken. Try another.";
-    } else {
-      // Save URL + optional password
-      ref.set({
-        url: longUrl,
-        password: password || null,
-        createdAt: Date.now()
-      }, (error) => {
-        if (error) {
-              resultBox.innerText = "❌ Failed to save. Try again.";
-            } else {
-              const shortUrl = `${location.origin}/file/?alias=${alias}`;
-             resultBox.innerHTML = `
-  ✅ Your short link:<br>
-  <a href="${shortUrl}" target="_blank">${shortUrl}</a><br><br>
-  <button class="auth-button" onclick="copyToClipboard('${shortUrl}')">📋 Copy to Clipboard</button><br><br>
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=150x150" alt="QR Code" />
-`;
-
-            }
-          });
-        }
-      });
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
