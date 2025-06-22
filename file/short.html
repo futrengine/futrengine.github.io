@@ -17,13 +17,16 @@
       <input type="password" id="linkPassword" placeholder="Password (optional)" class="input" />
       
       <div class="expiry-wrapper">
-        <select id="expiry" class="input">
-          <option value="none">No Limit</option>
-          <option value="1h">1 Hour</option>
-          <option value="1d">1 Day</option>
-          <option value="7d">7 Days</option>
-        </select>
-        <input type="datetime-local" id="customExpiry" class="input" placeholder="Custom expiry (optional)" />
+        <select id="expiry" class="input" onchange="handleExpiryChange()">
+  <option value="none">No Limit</option>
+  <option value="1h">1 Hour</option>
+  <option value="1d">1 Day</option>
+  <option value="7d">7 Days</option>
+  <option value="custom">Custom</option>
+</select>
+
+<input type="datetime-local" id="customExpiry" class="input" placeholder="Custom Expiry" style="display: none;" />
+
       </div>
 
       <button onclick="shorten()" class="button pulse">✨ Create Short Link</button>
