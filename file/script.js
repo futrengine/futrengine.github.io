@@ -29,27 +29,42 @@ function copyToClipboard(text) {
 }
 
 function shorten() {
-  const urlRegex = /^(https?:\/\/)?(www\.)?[a-z0-9\-]+(\.[a-z]{2,})(\/\S*)?$/i;
-if (!urlRegex.test(longUrl)) {
-  resultBox.innerText = "❌ Invalid URL. Must start with http://, https:// or www.";
-  return;
-}
-  const longUrl = document.getElementById("longUrl").value.trim();
+  const longUrlInput = document.getElementById("longUrl").value.trim();
   const alias = document.getElementById("customAlias").value.trim();
   const password = document.getElementById("linkPassword").value.trim();
   const expiryOpt = document.getElementById("expiry").value;
   const customExpiry = document.getElementById("customExpiry").value;
   const resultBox = document.getElementById("result");
 
+  resultBox.className = "result-box"; // Reset classes
+  resultBox.innerHTML = ""; // Clear output
+
+  // Validate URL format
+  const urlRegex = /^(https?:\/\/)?(www\.)?[a-z0-9\-]+(\.[a-z]{2,})(\/\S*)?$/i;
+  if (!urlRegex.test(longUrlInput)) {
+    resultBox.classList.add("error");
+    resultBox.innerText = "❌ Invalid URL. Must start with http://, https:// or www.";
+    return;
+  }
+
+  // Prepend https:// if not included
+  let longUrl = longUrlInput;
+  if (!longUrl.startsWith("http://") && !longUrl.startsWith("https://")) {
+    longUrl = "https://" + longUrl;
+  }
+
   if (!longUrl || !alias) {
-    resultBox.innerText = "❌ Please fill out URL and alias.";
+    resultBox.classList.add("error");
+    resultBox.innerText = "❌ Please enter both URL and alias.";
     return;
   }
 
   if (!alias.match(/^[a-zA-Z0-9_-]+$/)) {
-    resultBox.innerText = "❌ Alias can only use letters, numbers, _ and -";
+    resultBox.classList.add("error");
+    resultBox.innerText = "❌ Alias must contain only letters, numbers, _ or -";
     return;
   }
+
 
   const ref = db.ref("links/" + alias);
 
