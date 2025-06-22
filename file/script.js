@@ -57,7 +57,16 @@ function copyToClipboard(text) {
 // ✅ Shorten Function
 function shorten() {
   const longUrlInput = document.getElementById("longUrl").value.trim();
-  const alias = document.getElementById("customAlias").value.trim();
+  let alias = document.getElementById("customAlias").value.trim();
+
+// If empty, generate one
+if (!alias) {
+  const random = Math.floor(1000 + Math.random() * 9000); // 4 digit random
+  alias = "link" + random;
+  document.getElementById("customAlias").value = alias;
+}
+
+
   const password = document.getElementById("linkPassword").value.trim();
   const expiryOpt = document.getElementById("expiry").value;
   const customExpiry = document.getElementById("customExpiry").value;
