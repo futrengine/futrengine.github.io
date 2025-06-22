@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Spin to Win</title>
+  <meta charset="UTF-8">
+  <title>Spin & Win</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script defer src="firebase-config.js"></script>
-  <script defer src="script.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h2>🎰 Spin & Win</h2>
+  <div class="wheel-container">
+    <canvas id="wheel" width="500" height="500"></canvas>
     <button id="spinBtn">Spin Now</button>
     <div id="resultBox"></div>
   </div>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="wheel.js"></script>
 </body>
 </html>
