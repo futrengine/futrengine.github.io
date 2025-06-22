@@ -133,8 +133,10 @@
       <tbody id="urlTable"></tbody>
     </table>
     <div class="pagination">
-      <button id="nextBtn" class="auth-button" onclick="showNextBatch()">Next</button>
-    </div>
+  <button id="prevBtn" class="auth-button" onclick="showPrevBatch()">Previous</button>
+  <span id="pageInfo" style="margin: 0 10px; color: #f1f5f9;"></span>
+  <button id="nextBtn" class="auth-button" onclick="showNextBatch()">Next</button>
+</div>
   </div>
 
   <script>
@@ -192,40 +194,53 @@
       });
     }
 
-    function renderBatch() {
-      const table = document.getElementById("urlTable");
-      table.innerHTML = "";
+function renderBatch() {
+  const table = document.getElementById("urlTable");
+  table.innerHTML = "";
 
-      const now = Date.now();
-      const base = location.origin + "/file/?alias=";
-      const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
+  const now = Date.now();
+  const base = location.origin + "/file/?alias=";
+  const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
 
-      batch.forEach(([alias, info]) => {
-        const shortUrl = `${base}${alias}`;
-        const expired = info.expiresAt && now > info.expiresAt;
-        const expiryText = info.expiresAt ? new Date(info.expiresAt).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
+  batch.forEach(([alias, info]) => {
+    const shortUrl = `${base}${alias}`;
+    const expired = info.expiresAt && now > info.expiresAt;
+    const expiryText = info.expiresAt ? new Date(info.expiresAt).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
 
-        db.ref("clicks/" + alias).once("value").then(clickSnap => {
-          const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
+    db.ref("clicks/" + alias).once("value").then(clickSnap => {
+      const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
 
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${alias}</td>
-            <td><a href="${info.url}" target="_blank">${info.url}</a></td>
-            <td>${clicks}</td>
-            <td>${expiryText}</td>
-            <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
-            <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
-            <td>
-              <button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button>
-              <button class="auth-button" onclick="showDetails('${alias}', this)">📈 Details</button>
-            </td>
-          `;
-          table.appendChild(tr);
-        });
-      });
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${alias}</td>
+        <td><a href="${info.url}" target="_blank">${info.url}</a></td>
+        <td>${clicks}</td>
+        <td>${expiryText}</td>
+        <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
+        <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
+        <td>
+          <button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button>
+          <button class="auth-button" onclick="showDetails('${alias}', this)">📈 Details</button>
+        </td>
+      `;
+      table.appendChild(tr);
+    });
+  });
 
-      document.querySelector("table").scrollIntoView({ behavior: "smooth" });
+  // Pagination controls
+  const pageInfo = document.getElementById("pageInfo");
+  const totalPages = Math.ceil(allLinks.length / pageSize);
+  const currentPage = Math.floor(currentIndex / pageSize) + 1;
+
+  pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
+
+  document.getElementById("prevBtn").disabled = currentIndex === 0;
+  document.getElementById("nextBtn").style.display =
+    currentIndex + pageSize >= allLinks.length ? "none" : "inline-block";
+
+  document.querySelector("table").scrollIntoView({ behavior: "smooth" });
+}
+
 
       document.getElementById("nextBtn").style.display =
         currentIndex + pageSize >= allLinks.length ? "none" : "inline-block";
