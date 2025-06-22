@@ -29,6 +29,11 @@ function copyToClipboard(text) {
 }
 
 function shorten() {
+  const urlRegex = /^(https?:\/\/)?(www\.)?[a-z0-9\-]+(\.[a-z]{2,})(\/\S*)?$/i;
+if (!urlRegex.test(longUrl)) {
+  resultBox.innerText = "❌ Invalid URL. Must start with http://, https:// or www.";
+  return;
+}
   const longUrl = document.getElementById("longUrl").value.trim();
   const alias = document.getElementById("customAlias").value.trim();
   const password = document.getElementById("linkPassword").value.trim();
@@ -75,3 +80,11 @@ function shorten() {
     }
   });
 }
+
+function handleExpiryChange() {
+  const expiryValue = document.getElementById("expiry").value;
+  const customInput = document.getElementById("customExpiry");
+  customInput.style.display = expiryValue === "custom" ? "block" : "none";
+}
+
+
