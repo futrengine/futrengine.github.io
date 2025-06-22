@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - FutrEngine</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #38bdf8;
+    }
+
+    .auth-input {
+      display: block;
+      margin-bottom: 10px;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    .auth-button {
+      padding: 10px 16px;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background 0.2s;
+    }
+
+    .auth-button:hover {
+      background: #2563eb;
+    }
+
+    .hidden { display: none; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #334155;
+      text-align: left;
+    }
+
+    th {
+      background: #1e293b;
+      color: #f1f5f9;
+    }
+
+    td {
+      background: #0f172a;
+    }
+
+    .click-details {
+      background: #1e293b;
+      margin: 10px 0;
+      padding: 12px;
+      border-left: 5px solid #3b82f6;
+      border-radius: 5px;
+      font-size: 15px;
+      color: #e2e8f0;
+      overflow-y: auto;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .logout-btn {
+      background: #ef4444;
+    }
+
+    .logout-btn:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🛡️ Admin Login</h2>
+  <input type="text" id="username" class="auth-input" placeholder="Username" required />
+  <input type="password" id="password" class="auth-input" placeholder="Password" required />
+  <button onclick="login()" class="auth-button">Login</button>
+  <p id="loginError" style="color:#f87171;"></p>
+
+  <div id="dashboard" class="hidden">
+    <div class="topbar">
+      <h2>📊 Admin Dashboard</h2>
+      <div>
+        <button onclick="loadLinks()" class="auth-button">🔁 Refresh</button>
+        <button onclick="logout()" class="auth-button logout-btn">🚪 Logout</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Alias</th>
+          <th>URL</th>
+          <th>Clicks</th>
+          <th>Expiry</th>
+          <th>Short URL</th>
+          <th>QR</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="urlTable"></tbody>
+    </table>
+    <div class="pagination">
+      <button id="nextBtn" class="auth-button" onclick="showNextBatch()">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
+      authDomain: "futrshortener-7acf0.firebaseapp.com",
+      databaseURL: "https://futrshortener-7acf0-default-rtdb.firebaseio.com",
+      projectId: "futrshortener-7acf0",
+      storageBucket: "futrshortener-7acf0.appspot.com",
+      messagingSenderId: "863839648409",
+      appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let allLinks = [];
+    let currentIndex = 0;
+    const pageSize = 5;
+
+    function login() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const errorBox = document.getElementById("loginError");
+
+      if (user === "Jachu21" && pass === "212007") {
+        document.getElementById("username").style.display = "none";
+        document.getElementById("password").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        errorBox.style.display = "none";
+        document.querySelector("h2").innerText = "✅ Logged in as Admin";
+        document.getElementById("dashboard").classList.remove("hidden");
+        loadLinks();
+      } else {
+        errorBox.innerText = "❌ Invalid credentials!";
+        errorBox.style.display = "block";
+      }
+    }
+
+    function logout() {
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("username").style.display = "block";
+      document.getElementById("password").style.display = "block";
+      document.querySelector("button").style.display = "inline-block";
+      document.getElementById("username").value = "";
+      document.getElementById("password").value = "";
+      document.querySelector("h2").innerText = "🛡️ Admin Login";
+    }
+
+    function loadLinks() {
+      db.ref("links").once("value").then(snapshot => {
+        allLinks = Object.entries(snapshot.val() || {});
+        currentIndex = 0;
+        renderBatch();
+      });
+    }
+
+    function renderBatch() {
+      const table = document.getElementById("urlTable");
+      table.innerHTML = "";
+
+      const now = Date.now();
+      const base = location.origin + "/file/?alias=";
+      const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
+
+      batch.forEach(([alias, info]) => {
+        const shortUrl = `${base}${alias}`;
+        const expired = info.expiresAt && now > info.expiresAt;
+        const expiryText = info.expiresAt ? new Date(info.expiresAt).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️ No Limit";
+
+        db.ref("clicks/" + alias).once("value").then(clickSnap => {
+          const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${alias}</td>
+            <td><a href="${info.url}" target="_blank">${info.url}</a></td>
+            <td>${clicks}</td>
+            <td>${expiryText}</td>
+            <td><a href="${shortUrl}" target="_blank">${shortUrl}</a></td>
+            <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=100x100" /></td>
+            <td>
+              <button class="auth-button" onclick="deleteLink('${alias}')">🗑️ Delete</button>
+              <button class="auth-button" onclick="showDetails('${alias}', this)">📈 Details</button>
+            </td>
+          `;
+          table.appendChild(tr);
+        });
+      });
+
+      document.querySelector("table").scrollIntoView({ behavior: "smooth" });
+
+      document.getElementById("nextBtn").style.display =
+        currentIndex + pageSize >= allLinks.length ? "none" : "inline-block";
+    }
+
+    function showNextBatch() {
+      currentIndex += pageSize;
+      renderBatch();
+    }
+
+    function deleteLink(alias) {
+      if (confirm(`Delete link "${alias}"?`)) {
+        db.ref("links/" + alias).remove().then(loadLinks);
+        db.ref("clicks/" + alias).remove();
+      }
+    }
+
+    function showDetails(alias, btn) {
+      const parentRow = btn.closest("tr");
+      let nextRow = parentRow.nextElementSibling;
+
+      if (nextRow && nextRow.classList.contains("details-row")) {
+        nextRow.remove();
+        return;
+      }
+
+      db.ref("clicks/" + alias).once("value").then(snap => {
+        const data = snap.val();
+        const div = document.createElement("div");
+
+        if (!data) {
+          div.innerHTML = "<em>No clicks yet.</em>";
+        } else {
+          div.innerHTML = Object.values(data).map(click => `
+            <div class="click-details">
+              <strong>Time:</strong> ${new Date(click.timestamp).toLocaleString()}<br/>
+              <strong>Country:</strong> ${click.country || 'N/A'}<br/>
+              <strong>Region:</strong> ${click.region || 'N/A'}<br/>
+              <strong>City:</strong> ${click.city || 'N/A'}<br/>
+              <strong>IP:</strong> ${click.ip || 'N/A'}<br/>
+              <strong>Device:</strong> ${click.device || 'N/A'}
+            </div>
+          `).join("");
+        }
+
+        const row = document.createElement("tr");
+        row.className = "details-row";
+        const td = document.createElement("td");
+        td.colSpan = 7;
+        td.appendChild(div);
+        row.appendChild(td);
+        parentRow.parentNode.insertBefore(row, parentRow.nextSibling);
+      });
+    }
+  </script>
+</body>
+</html>
