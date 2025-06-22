@@ -9,19 +9,21 @@ const rewards = [
   { label: "Jackpot!", value: 500, color: "#f1c40f" },
 ];
 
-const userId = Telegram.WebApp.initDataUnsafe.user.id;
+const tg = window.Telegram.WebApp;
+const userId = tg.initDataUnsafe.user.id;
 const today = new Date().toISOString().split('T')[0];
 
-const wheel = document.getElementById('wheel');
-const ctx = wheel.getContext('2d');
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
 const btn = document.getElementById('spinBtn');
 const resultBox = document.getElementById('resultBox');
 
 const arcSize = (2 * Math.PI) / rewards.length;
-let currentAngle = 0;
-let spinning = false;
+let currentAngle = 0, spinning = false;
 
 function drawWheel() {
+  ctx.clearRect(0, 0, 500, 500);
+  ctx.font = 'bold 16px sans-serif';
   rewards.forEach((seg, i) => {
     const ang = currentAngle + i * arcSize;
     ctx.beginPath();
@@ -30,27 +32,25 @@ function drawWheel() {
     ctx.arc(250, 250, 250, ang, ang + arcSize);
     ctx.fill();
     ctx.save();
-    ctx.translate(250 + Math.cos(ang + arcSize / 2) * 180,
-                  250 + Math.sin(ang + arcSize / 2) * 180);
-    ctx.rotate(ang + arcSize / 2 + Math.PI / 2);
+    ctx.translate(250 + Math.cos(ang + arcSize/2) * 180,
+                  250 + Math.sin(ang + arcSize/2) * 180);
+    ctx.rotate(ang + arcSize/2 + Math.PI/2);
     ctx.fillStyle = "#fff";
     ctx.fillText(seg.label, -ctx.measureText(seg.label).width/2, 0);
     ctx.restore();
   });
 }
-ctx.font = 'bold 16px sans-serif';
-drawWheel();
 
 async function canSpin() {
-  const snap = await getDoc(doc(db, 'users', userId.toString()));
+  const snap = await getDoc(doc(db, 'users', userId + ''));
   return !snap.exists() || snap.data().lastSpin !== today;
 }
 
 async function recordSpin() {
-  await setDoc(doc(db, 'users', userId.toString()), { lastSpin: today }, { merge: true });
+  await setDoc(doc(db, 'users', userId + ''), { lastSpin: today }, { merge: true });
 }
 
-function getRandomReward() {
+function pickReward() {
   return rewards[Math.floor(Math.random() * rewards.length)];
 }
 
@@ -61,25 +61,27 @@ btn.onclick = async () => {
     return;
   }
   spinning = true;
-  recordSpin();
+  await recordSpin();
 
-  const pick = getRandomReward();
-  const targetAngle = rewards.indexOf(pick) * arcSize + arcSize / 2;
+  const reward = pickReward();
+  const targetAngle = rewards.indexOf(reward) * arcSize + arcSize/2;
   const spins = 5;
-  const finalAngle = (Math.PI * 2 * spins) + (Math.PI * 2 - targetAngle);
-  
-  let start = null;
-  function animate(ts) {
-    if (!start) start = ts;
-    const progress = Math.min((ts - start) / 5000, 1);
-    currentAngle = progress * finalAngle;
-    ctx.clearRect(0,0,500,500);
+  const finalAngle = (2 * Math.PI * spins) + (2 * Math.PI - targetAngle);
+
+  const duration = 5000;
+  const start = performance.now();
+
+  function animate(now) {
+    const t = Math.min((now - start) / duration, 1);
+    currentAngle = t * finalAngle;
     drawWheel();
-    if (progress < 1) requestAnimationFrame(animate);
+    if (t < 1) requestAnimationFrame(animate);
     else {
-      resultBox.innerHTML = `🎉 You won: <b>${pick.label}</b>`;
+      resultBox.innerHTML = `🎉 You won: <b>${reward.label}</b>`;
       spinning = false;
     }
   }
   requestAnimationFrame(animate);
 };
+
+drawWheel();
