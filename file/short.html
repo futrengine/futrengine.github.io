@@ -43,5 +43,24 @@
   <div id="loader" class="loader-overlay" style="display: none;">
   <div class="spinner"></div>
 </div>
+
+  <div id="loader" style="display:none; justify-content:center; align-items:center; position:fixed; inset:0; background:rgba(255,255,255,0.6); z-index:9999;">
+  <div class="dual-ring"></div>
+</div>
+<style>
+.dual-ring {
+  width: 60px;
+  height: 60px;
+  border: 6px solid transparent;
+  border-top: 6px solid #3b82f6;
+  border-bottom: 6px solid #8b5cf6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
 </body>
 </html>
