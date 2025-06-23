@@ -1,3 +1,4 @@
+
 const firebaseConfig = {
   apiKey: "AIzaSyBKA3bxy1caa0QiGrn6AihtxufiO7xxTnI",
   authDomain: "futrshortener-7acf0.firebaseapp.com",
