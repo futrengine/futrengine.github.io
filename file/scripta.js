@@ -79,13 +79,15 @@ function renderBatch() {
       const tr = document.createElement("tr");
       const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
       tr.innerHTML = `
-        <td>${alias}</td>
-        <td><a href="${info.url}" target="_blank">${info.url}</a></td>
-        <td>${clicks}</td>
-        <td>
-          <button onclick="deleteLink('${alias}')" class="button">🗑️</button>
-        </td>
-      `;
+  <td>${alias}</td>
+  <td><a href="${info.url}" target="_blank">${info.url}</a></td>
+  <td>${clicks}</td>
+  <td>
+    <button onclick="deleteLink('${alias}')" class="button">🗑️</button>
+    <button onclick="showDetails('${alias}', this)" class="button">📈 Details</button>
+  </td>
+`;
+
       tbody.appendChild(tr);
     });
   });
@@ -114,6 +116,44 @@ function deleteLink(alias) {
     loadLinks();
   }
 }
+
+function showDetails(alias, btn) {
+  const row = btn.closest("tr");
+  let nextRow = row.nextElementSibling;
+
+  if (nextRow && nextRow.classList.contains("details-row")) {
+    nextRow.remove(); // collapse if open
+    return;
+  }
+
+  db.ref("clicks/" + alias).once("value").then(snap => {
+    const clicks = snap.val();
+    const detailRow = document.createElement("tr");
+    detailRow.className = "details-row";
+
+    const td = document.createElement("td");
+    td.colSpan = 4;
+
+    if (!clicks) {
+      td.innerHTML = "<em>No click data available.</em>";
+    } else {
+      td.innerHTML = Object.values(clicks).map(c => `
+        <div style="background:#1e293b; margin:6px 0; padding:10px; border-left:4px solid #3b82f6;">
+          <b>📅 Time:</b> ${new Date(c.timestamp).toLocaleString()}<br>
+          <b>🌍 Country:</b> ${c.country || 'N/A'}<br>
+          <b>📍 Region:</b> ${c.region || 'N/A'}<br>
+          <b>🏙️ City:</b> ${c.city || 'N/A'}<br>
+          <b>📱 Device:</b> ${c.device || 'N/A'}<br>
+          <b>🔐 IP:</b> ${c.ip || 'N/A'}
+        </div>
+      `).join('');
+    }
+
+    detailRow.appendChild(td);
+    row.parentNode.insertBefore(detailRow, row.nextSibling);
+  });
+}
+
 
 // ================= Ban =================
 function banIP() {
