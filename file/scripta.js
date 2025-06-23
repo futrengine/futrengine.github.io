@@ -7,33 +7,23 @@ const firebaseConfig = {
   messagingSenderId: "863839648409",
   appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let allLinks = [];
-let currentIndex = 0;
-const pageSize = 5;
-
-function switchTab(id) {
-  document.querySelectorAll('.section').forEach(div => div.classList.add("hidden"));
+function switchSection(id) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
 }
 
 function login() {
-  const u = document.getElementById("username").value;
-  const p = document.getElementById("password").value;
-  const err = document.getElementById("loginError");
-
-  if (u === "Jachu21" && p === "212007") {
-    document.getElementById("loginSection").classList.add("hidden");
-    document.querySelector(".sidebar").style.display = "flex";
-    switchTab('dashboard');
-    renderStats();
-    loadLinks();
-    loadBanned();
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  if (user === "Jachu21" && pass === "212007") {
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("dashboard").classList.remove("hidden");
+    loadDashboard();
   } else {
-    err.innerText = "❌ Wrong username or password.";
+    document.getElementById("loginError").innerText = "❌ Invalid credentials";
   }
 }
 
@@ -41,65 +31,66 @@ function logout() {
   location.reload();
 }
 
-function renderStats() {
+// ================= Dashboard =================
+function loadDashboard() {
   db.ref("links").once("value").then(snap => {
-    const all = snap.val() || {};
-    const list = Object.entries(all);
-    const today = list.filter(([k, v]) => {
-      const d = new Date(v.createdAt);
-      const now = new Date();
-      return d.toDateString() === now.toDateString();
+    const data = snap.val() || {};
+    const now = Date.now();
+    let today = 0;
+    const last = Object.entries(data).slice(-5).reverse();
+    lastLinks.innerHTML = "";
+
+    Object.values(data).forEach(link => {
+      if (new Date(link.createdAt).toDateString() === new Date().toDateString()) {
+        today++;
+      }
     });
-    document.getElementById("statsCards").innerHTML = `
-      <div>🔗 Total Links: <b>${list.length}</b></div>
-      <div>📅 Today: <b>${today.length}</b></div>
-    `;
-    const last5 = list.slice(-5).reverse().map(([a, v]) =>
-      `<li>${a} → <a href="${v.url}" target="_blank">${v.url}</a></li>`).join("");
-    document.getElementById("recentLinks").innerHTML = last5 || "<i>No recent links.</i>";
+
+    document.getElementById("todayCount").innerText = today;
+    document.getElementById("totalCount").innerText = Object.keys(data).length;
+    last.forEach(([alias, info]) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="/file/?alias=${alias}" target="_blank">${alias}</a> - ${info.url}`;
+      lastLinks.appendChild(li);
+    });
   });
 }
 
+// ================= Manage =================
+let allLinks = [];
+let currentIndex = 0;
+const pageSize = 5;
+
 function loadLinks() {
-  db.ref("links").once("value").then(snap => {
-    allLinks = Object.entries(snap.val() || {});
+  db.ref("links").once("value").then(snapshot => {
+    allLinks = Object.entries(snapshot.val() || {});
     currentIndex = 0;
     renderBatch();
   });
 }
 
 function renderBatch() {
-  const now = Date.now();
-  const rows = allLinks.slice(currentIndex, currentIndex + pageSize);
-  const table = document.getElementById("urlTable");
-  table.innerHTML = "";
+  const tbody = document.querySelector("#urlTable tbody");
+  tbody.innerHTML = "";
+  const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
 
-  rows.forEach(([alias, data]) => {
-    const url = `${location.origin}/file/?alias=${alias}`;
-    const exp = data.expiresAt ? new Date(data.expiresAt).toLocaleString() : "♾️ No Limit";
-
-    db.ref("clicks/" + alias).once("value").then(cSnap => {
-      const clicks = cSnap.exists() ? Object.keys(cSnap.val()).length : 0;
+  batch.forEach(([alias, info]) => {
+    db.ref("clicks/" + alias).once("value").then(clickSnap => {
       const tr = document.createElement("tr");
+      const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
       tr.innerHTML = `
         <td>${alias}</td>
-        <td><a href="${data.url}" target="_blank">${data.url}</a></td>
+        <td><a href="${info.url}" target="_blank">${info.url}</a></td>
         <td>${clicks}</td>
-        <td>${exp}</td>
-        <td><a href="${url}" target="_blank">${url}</a></td>
-        <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(url)}&size=80x80"></td>
         <td>
-          <button onclick="deleteLink('${alias}')">🗑️</button>
-          <button onclick="showDetails('${alias}', this)">📈</button>
+          <button onclick="deleteLink('${alias}')" class="button">🗑️</button>
         </td>
       `;
-      table.appendChild(tr);
+      tbody.appendChild(tr);
     });
   });
 
-  const totalPages = Math.ceil(allLinks.length / pageSize);
-  const currentPage = Math.floor(currentIndex / pageSize) + 1;
-  document.getElementById("pageInfo").innerText = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById("pageInfo").innerText = `Page ${Math.floor(currentIndex / pageSize) + 1}`;
 }
 
 function showNextBatch() {
@@ -117,58 +108,36 @@ function showPrevBatch() {
 }
 
 function deleteLink(alias) {
-  if (confirm("Delete link " + alias + "?")) {
+  if (confirm("Delete " + alias + "?")) {
     db.ref("links/" + alias).remove();
     db.ref("clicks/" + alias).remove();
     loadLinks();
   }
 }
 
-function showDetails(alias, btn) {
-  const tr = btn.closest("tr");
-  const next = tr.nextElementSibling;
-  if (next && next.classList.contains("details-row")) return next.remove();
-
-  db.ref("clicks/" + alias).once("value").then(snap => {
-    const div = document.createElement("tr");
-    div.className = "details-row";
-    const td = document.createElement("td");
-    td.colSpan = 7;
-    const data = snap.val();
-    td.innerHTML = data
-      ? Object.values(data).map(d => `
-        <div class="click-details">
-          <b>Time:</b> ${new Date(d.timestamp).toLocaleString()}<br/>
-          <b>Country:</b> ${d.country || 'N/A'} | <b>IP:</b> ${d.ip || 'N/A'}<br/>
-          <b>Device:</b> ${d.device || 'N/A'}
-        </div>`).join("")
-      : "<i>No click data.</i>";
-    div.appendChild(td);
-    tr.parentNode.insertBefore(div, tr.nextSibling);
-  });
-}
-
+// ================= Ban =================
 function banIP() {
-  const ip = document.getElementById("banIp").value.trim();
-  if (!ip) return alert("Enter an IP");
-  db.ref("banned/" + ip).set(true).then(() => {
-    alert("✅ Banned " + ip);
-    loadBanned();
-  });
+  const ip = document.getElementById("ipInput").value.trim();
+  if (!ip) return alert("Enter a valid IP.");
+  db.ref("banned/" + ip).set(true);
+  loadBannedIPs();
 }
 
-function unbanIP() {
-  const ip = document.getElementById("banIp").value.trim();
-  if (!ip) return alert("Enter an IP");
-  db.ref("banned/" + ip).remove().then(() => {
-    alert("✅ Unbanned " + ip);
-    loadBanned();
-  });
+function unban(ip) {
+  db.ref("banned/" + ip).remove();
+  loadBannedIPs();
 }
 
-function loadBanned() {
+function loadBannedIPs() {
   db.ref("banned").once("value").then(snap => {
-    const banned = Object.keys(snap.val() || {});
-    document.getElementById("bannedList").innerHTML = banned.map(ip => `<li>${ip}</li>`).join("");
+    const list = document.getElementById("bannedList");
+    list.innerHTML = "";
+    Object.keys(snap.val() || {}).forEach(ip => {
+      const li = document.createElement("li");
+      li.innerHTML = `${ip} <button onclick="unban('${ip}')" class="button">Unban</button>`;
+      list.appendChild(li);
+    });
   });
 }
+
+window.onload = () => loadBannedIPs();
