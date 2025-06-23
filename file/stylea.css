@@ -1,86 +1,115 @@
+* {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: #0f172a;
-  color: #fff;
+  color: #f1f5f9;
+  display: flex;
 }
-.login-box {
-  padding: 30px;
-  max-width: 400px;
-  margin: 100px auto;
-  text-align: center;
-}
-.login-box input {
-  display: block;
-  margin: 10px auto;
-  padding: 10px;
-  width: 90%;
-}
-button {
-  background: #3b82f6;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  margin-top: 10px;
-  cursor: pointer;
-}
-button:hover {
-  background: #2563eb;
+.admin-container {
+  display: flex;
+  width: 100%;
 }
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100%;
+  width: 220px;
   background: #1e293b;
   padding: 20px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-.sidebar h3 {
-  color: #38bdf8;
+.sidebar h2 {
   margin-bottom: 20px;
+  color: #38bdf8;
 }
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-.sidebar ul li {
-  margin: 15px 0;
+.sidebar button {
+  background: none;
+  border: none;
+  color: #f8fafc;
+  padding: 10px 0;
+  text-align: left;
   cursor: pointer;
 }
-.main-area {
-  margin-left: 220px;
+.sidebar .logout {
+  margin-top: auto;
+  color: #f87171;
+}
+.main-content {
+  flex-grow: 1;
   padding: 20px;
+}
+.auth-input {
+  display: block;
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 5px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: white;
+}
+.auth-button {
+  background: #3b82f6;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  margin: 10px 5px 10px 0;
+}
+.auth-button:hover {
+  background: #2563eb;
+}
+.error-text {
+  color: #f87171;
+}
+.section {
+  margin-top: 20px;
 }
 .hidden {
   display: none;
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
+.cards {
+  display: flex;
+  gap: 20px;
 }
-th, td {
-  padding: 10px;
-  border: 1px solid #334155;
+.cards div {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 8px;
+  flex: 1;
 }
 .topbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+table {
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #334155;
+  padding: 10px;
+}
+th {
+  background: #1e293b;
+}
+td {
+  background: #0f172a;
 }
 .pagination {
-  margin-top: 15px;
-  text-align: center;
+  margin-top: 10px;
 }
-.panel-section h2 {
-  margin-top: 0;
-}
-input[type="text"], input[type="password"] {
-  background: #1e293b;
-  border: 1px solid #334155;
+.pagination button {
+  background: #334155;
+  border: none;
+  padding: 5px 10px;
+  margin: 0 5px;
   color: white;
-  padding: 8px;
-}
-.error {
-  color: red;
+  cursor: pointer;
 }
