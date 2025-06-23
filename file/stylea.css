@@ -1,115 +1,119 @@
-* {
-  box-sizing: border-box;
-}
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background: #0f172a;
-  color: #f1f5f9;
+  color: #f8fafc;
   display: flex;
 }
-.admin-container {
-  display: flex;
-  width: 100%;
-}
+
 .sidebar {
   width: 220px;
   background: #1e293b;
   padding: 20px;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.2);
 }
-.sidebar h2 {
-  margin-bottom: 20px;
+
+.sidebar h1 {
   color: #38bdf8;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
-.sidebar button {
-  background: none;
-  border: none;
-  color: #f8fafc;
-  padding: 10px 0;
-  text-align: left;
-  cursor: pointer;
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
 }
-.sidebar .logout {
-  margin-top: auto;
-  color: #f87171;
-}
-.main-content {
-  flex-grow: 1;
-  padding: 20px;
-}
-.auth-input {
-  display: block;
-  margin: 10px 0;
+
+.sidebar li {
   padding: 10px;
-  width: 100%;
-  max-width: 400px;
+  margin-bottom: 10px;
+  background: #334155;
   border-radius: 5px;
-  border: 1px solid #334155;
-  background: #1e293b;
-  color: white;
-}
-.auth-button {
-  background: #3b82f6;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
-  color: white;
   cursor: pointer;
-  margin: 10px 5px 10px 0;
+  transition: 0.3s;
 }
-.auth-button:hover {
-  background: #2563eb;
+
+.sidebar li:hover {
+  background: #3b82f6;
+  color: white;
 }
-.error-text {
-  color: #f87171;
+
+.main {
+  flex: 1;
+  padding: 30px;
 }
+
 .section {
-  margin-top: 20px;
-}
-.hidden {
   display: none;
 }
-.cards {
-  display: flex;
-  gap: 20px;
+
+.section:not(.hidden) {
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
 }
-.cards div {
-  background: #1e293b;
-  padding: 15px;
-  border-radius: 8px;
-  flex: 1;
-}
+
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
+.input {
+  padding: 10px;
+  width: 300px;
+  margin: 10px 0;
+  border: 1px solid #475569;
+  background: #1e293b;
+  color: white;
+  border-radius: 6px;
+}
+
+.button {
+  padding: 10px 15px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  margin: 5px;
+  transition: 0.2s;
+}
+
+.button:hover {
+  background: #2563eb;
+}
+
+.hidden {
+  display: none;
+}
+
 table {
   width: 100%;
-  margin-top: 15px;
   border-collapse: collapse;
+  margin-top: 20px;
 }
+
 th, td {
-  border: 1px solid #334155;
   padding: 10px;
+  border: 1px solid #475569;
+  text-align: left;
 }
+
 th {
   background: #1e293b;
 }
-td {
-  background: #0f172a;
+
+tr:nth-child(even) td {
+  background: #1e293b;
 }
+
 .pagination {
-  margin-top: 10px;
+  margin-top: 20px;
+  text-align: center;
 }
-.pagination button {
-  background: #334155;
-  border: none;
-  padding: 5px 10px;
-  margin: 0 5px;
-  color: white;
-  cursor: pointer;
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
