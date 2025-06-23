@@ -157,3 +157,70 @@ body {
   100% { transform: rotate(360deg); }
 }
 
+.result-box {
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 15px;
+  animation: fadeIn 0.5s ease;
+}
+.result-box.success {
+  background-color: #e6ffed;
+  color: #006b2b;
+  border-left: 5px solid #22c55e;
+}
+.result-box.error {
+  background-color: #ffe6e6;
+  color: #a40000;
+  border-left: 5px solid #ef4444;
+}
+
+.og-card {
+  display: flex;
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px #38bdf8;
+  animation: cardPulse 2s infinite;
+  margin-top: 20px;
+  max-width: 600px;
+}
+.og-card img {
+  width: 120px;
+  object-fit: cover;
+}
+.og-info {
+  padding: 15px;
+  flex: 1;
+}
+.og-info h3 {
+  margin: 0 0 10px;
+}
+.og-info p {
+  margin: 0 0 12px;
+  word-break: break-all;
+}
+.share-buttons a {
+  display: inline-block;
+  margin: 5px 5px 0 0;
+  padding: 6px 12px;
+  background: #3b82f6;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.share-buttons a:hover {
+  background: #2563eb;
+}
+
+@keyframes cardPulse {
+  0%, 100% { box-shadow: 0 0 12px #38bdf8; }
+  50% { box-shadow: 0 0 25px #60a5fa; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
