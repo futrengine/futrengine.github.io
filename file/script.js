@@ -125,7 +125,7 @@
             const shortUrl = `${location.origin}/file/?alias=${alias}`;
             updateResultBox(`
   <div class="og-card">
-    <img src="https://api.apiflash.com/v1/urltoimage?access_key=demo&url=${encodeURIComponent(shortUrl)}" alt="Preview of ${shortUrl}" />
+    <img src="https://api.apiflash.com/v1/urltoimage?access_key=b0e5bc53bdf0417eb10f041ec400ebaf&url=${encodeURIComponent(shortUrl)}" alt="Preview of ${shortUrl}" />
     <div class="og-info">
       <h3>🔗 Short Link Created!</h3>
       <p>${shortUrl}</p>
