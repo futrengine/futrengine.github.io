@@ -1,0 +1,101 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  background: #1e293b;
+  height: 100vh;
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar h3 {
+  color: #38bdf8;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  cursor: pointer;
+  color: #cbd5e1;
+}
+
+.sidebar li:hover {
+  color: #fff;
+  font-weight: bold;
+}
+
+.main {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.auth-input {
+  display: block;
+  margin-bottom: 12px;
+  padding: 10px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #f8fafc;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.auth-button {
+  padding: 10px 16px;
+  background: #3b82f6;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.auth-button:hover {
+  background: #2563eb;
+}
+
+.hidden {
+  display: none;
+}
+
+.page {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #334155;
+}
+
+th {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+td {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.pagination {
+  margin-top: 10px;
+}
