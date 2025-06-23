@@ -2,79 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin - FutrEngine</title>
+  <title>FutrEngine Admin Panel</title>
   <link rel="stylesheet" href="stylea.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
-  <div class="admin-container">
-    <aside class="sidebar">
-      <h2>🧠 FutrEngine</h2>
-      <nav>
-        <button onclick="switchTab('dashboard')">📊 Dashboard</button>
-        <button onclick="switchTab('manage')">🧾 Manage URLs</button>
-        <button onclick="switchTab('ban')">🚫 Ban/Unban Users</button>
-        <button onclick="logout()" class="logout">🚪 Logout</button>
-      </nav>
-    </aside>
+  <div class="sidebar">
+    <h1>FutrEngine</h1>
+    <ul>
+      <li onclick="switchSection('dashboard')">📊 Dashboard</li>
+      <li onclick="switchSection('manage')">🔗 Manage URLs</li>
+      <li onclick="switchSection('ban')">🚫 Ban/Unban</li>
+      <li onclick="logout()">🚪 Logout</li>
+    </ul>
+  </div>
 
-    <main class="main-content">
-      <!-- Login Section -->
-      <div id="loginSection">
-        <h2>🔐 Admin Login</h2>
-        <input type="text" id="username" class="auth-input" placeholder="Username" />
-        <input type="password" id="password" class="auth-input" placeholder="Password" />
-        <button onclick="login()" class="auth-button">Login</button>
-        <p id="loginError" class="error-text"></p>
-      </div>
+  <div class="main">
+    <div id="loginSection">
+      <h2>Admin Login</h2>
+      <input type="text" id="username" placeholder="Username" class="input" />
+      <input type="password" id="password" placeholder="Password" class="input" />
+      <button onclick="login()" class="button">Login</button>
+      <p id="loginError"></p>
+    </div>
 
-      <!-- Dashboard -->
-      <div id="dashboard" class="hidden section">
-        <h2>📈 Site Analytics</h2>
-        <div class="cards" id="statsCards"></div>
-        <h3>🕵️ Last 5 Shortened Links</h3>
-        <ul id="recentLinks"></ul>
+    <div id="dashboard" class="section hidden">
+      <div class="topbar">
+        <h2>📊 Dashboard</h2>
+        <button onclick="loadDashboard()" class="button">🔁 Refresh</button>
       </div>
+      <p><strong>Today's Links:</strong> <span id="todayCount">0</span></p>
+      <p><strong>Total Links:</strong> <span id="totalCount">0</span></p>
+      <h3>🕓 Last 5 Links</h3>
+      <ul id="lastLinks"></ul>
+    </div>
 
-      <!-- Manage URLs -->
-      <div id="manage" class="hidden section">
-        <div class="topbar">
-          <h2>🧾 Manage URLs</h2>
-          <button onclick="loadLinks()" class="auth-button">🔁 Refresh</button>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>Alias</th>
-              <th>URL</th>
-              <th>Clicks</th>
-              <th>Expiry</th>
-              <th>Short</th>
-              <th>QR</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="urlTable"></tbody>
-        </table>
-        <div class="pagination">
-          <button onclick="showPrevBatch()">⬅️ Prev</button>
-          <span id="pageInfo">Page 1</span>
-          <button onclick="showNextBatch()">Next ➡️</button>
-        </div>
+    <div id="manage" class="section hidden">
+      <div class="topbar">
+        <h2>🔗 Manage URLs</h2>
+        <button onclick="loadLinks()" class="button">🔁 Refresh</button>
       </div>
+      <table id="urlTable"><thead>
+        <tr><th>Alias</th><th>URL</th><th>Clicks</th><th>Actions</th></tr>
+      </thead><tbody></tbody></table>
+      <div class="pagination">
+        <button onclick="showPrevBatch()" class="button">⬅ Prev</button>
+        <span id="pageInfo">Page 1</span>
+        <button onclick="showNextBatch()" class="button">Next ➡</button>
+      </div>
+    </div>
 
-      <!-- Ban Users -->
-      <div id="ban" class="hidden section">
-        <h2>🚫 Ban / Unban Users</h2>
-        <input id="banIp" class="auth-input" placeholder="Enter IP to Ban/Unban">
-        <button onclick="banIP()" class="auth-button">Ban</button>
-        <button onclick="unbanIP()" class="auth-button">Unban</button>
-        <h4>🧾 Banned IPs</h4>
-        <ul id="bannedList"></ul>
-      </div>
-    </main>
+    <div id="ban" class="section hidden">
+      <h2>🚫 Banned IPs</h2>
+      <input type="text" id="ipInput" placeholder="Enter IP" class="input" />
+      <button onclick="banIP()" class="button">➕ Ban</button>
+      <ul id="bannedList"></ul>
+    </div>
   </div>
 
   <script src="scripta.js"></script>
