@@ -1,101 +1,86 @@
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
   background: #0f172a;
-  color: #f1f5f9;
-  display: flex;
+  color: #fff;
 }
-
+.login-box {
+  padding: 30px;
+  max-width: 400px;
+  margin: 100px auto;
+  text-align: center;
+}
+.login-box input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 90%;
+}
+button {
+  background: #3b82f6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+button:hover {
+  background: #2563eb;
+}
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 200px;
+  height: 100%;
   background: #1e293b;
-  height: 100vh;
   padding: 20px;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
 }
-
 .sidebar h3 {
   color: #38bdf8;
   margin-bottom: 20px;
 }
-
 .sidebar ul {
   list-style: none;
   padding: 0;
 }
-
-.sidebar li {
-  padding: 10px 0;
+.sidebar ul li {
+  margin: 15px 0;
   cursor: pointer;
-  color: #cbd5e1;
 }
-
-.sidebar li:hover {
-  color: #fff;
-  font-weight: bold;
+.main-area {
+  margin-left: 220px;
+  padding: 20px;
 }
-
-.main {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.auth-input {
-  display: block;
-  margin-bottom: 12px;
-  padding: 10px;
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #f8fafc;
-  border-radius: 6px;
-  width: 100%;
-  max-width: 400px;
-}
-
-.auth-button {
-  padding: 10px 16px;
-  background: #3b82f6;
-  border: none;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-.auth-button:hover {
-  background: #2563eb;
-}
-
 .hidden {
   display: none;
 }
-
-.page {
-  margin-top: 20px;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin-top: 15px;
 }
-
 th, td {
   padding: 10px;
   border: 1px solid #334155;
 }
-
-th {
-  background: #1e293b;
-  color: #f1f5f9;
+.topbar {
+  display: flex;
+  justify-content: space-between;
 }
-
-td {
-  background: #0f172a;
-  color: #e2e8f0;
-}
-
 .pagination {
-  margin-top: 10px;
+  margin-top: 15px;
+  text-align: center;
+}
+.panel-section h2 {
+  margin-top: 0;
+}
+input[type="text"], input[type="password"] {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: white;
+  padding: 8px;
+}
+.error {
+  color: red;
 }
