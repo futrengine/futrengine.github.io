@@ -124,24 +124,25 @@
           } else {
             const shortUrl = `${location.origin}/file/?alias=${alias}`;
             updateResultBox(`
-              <div class="og-card">
-                <img src="https://source.unsplash.com/featured/?technology" alt="Preview Image" />
-                <div class="og-info">
-                  <h3>🔗 Short Link Created!</h3>
-                  <p>${shortUrl}</p>
-                  <div class="share-buttons">
-                    <a href="https://wa.me/?text=${encodeURIComponent(shortUrl)}" target="_blank">📱 WhatsApp</a>
-                    <a href="https://t.me/share/url?url=${encodeURIComponent(shortUrl)}" target="_blank">📨 Telegram</a>
-                    <a href="https://www.instagram.com" target="_blank">📸 Instagram</a>
-                    <a href="https://www.youtube.com" target="_blank">▶️ YouTube</a>
-                    <a onclick="shareLink('${shortUrl}')" style="cursor:pointer;">➕ More</a>
-                  </div>
-                </div>
-              </div>
-              <br>
-              <button class="button" onclick="copyToClipboard('${shortUrl}')">📋 Copy</button><br><br>
-              <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=150x150" alt="QR Code" />
-            `, true);
+  <div class="og-card">
+    <img src="https://api.apiflash.com/v1/urltoimage?access_key=demo&url=${encodeURIComponent(shortUrl)}" alt="Preview of ${shortUrl}" />
+    <div class="og-info">
+      <h3>🔗 Short Link Created!</h3>
+      <p>${shortUrl}</p>
+      <button class="button" onclick="copyToClipboard('${shortUrl}')">📋 Copy</button>
+      <div class="share-buttons">
+        <a href="https://wa.me/?text=${encodeURIComponent(shortUrl)}" target="_blank">📱 WhatsApp</a>
+        <a href="https://t.me/share/url?url=${encodeURIComponent(shortUrl)}" target="_blank">📨 Telegram</a>
+        <a href="https://www.instagram.com" target="_blank">📸 Instagram</a>
+        <a href="https://www.youtube.com" target="_blank">▶️ YouTube</a>
+        <a onclick="shareLink('${shortUrl}')" style="cursor:pointer;">➕ More</a>
+      </div>
+    </div>
+  </div>
+  <br>
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(shortUrl)}&size=150x150" alt="QR Code" />
+`, true);
+
           }
         });
       }
