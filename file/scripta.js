@@ -5,80 +5,62 @@ const firebaseConfig = {
   projectId: "futrshortener-7acf0",
   storageBucket: "futrshortener-7acf0.appspot.com",
   messagingSenderId: "863839648409",
-  appId: "1:863839648409:web:d20ae154fe1c9dc1b19608",
+  appId: "1:863839648409:web:d20ae154fe1c9dc1b19608"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// Login logic
+let allLinks = [], currentIndex = 0, pageSize = 5;
+
 function login() {
-  const user = document.getElementById("username").value;
-  const pass = document.getElementById("password").value;
-  if (user === "Jachu21" && pass === "212007") {
-    document.getElementById("loginPage").classList.add("hidden");
-    switchPage("dashboard");
-    loadDashboard();
-    loadLinks();
-    loadBannedIps();
+  const u = document.getElementById("username").value;
+  const p = document.getElementById("password").value;
+  if (u === "Jachu21" && p === "212007") {
+    document.getElementById("loginSection").classList.add("hidden");
+    document.getElementById("adminPanel").classList.remove("hidden");
+    showSection("dashboard");
+    loadStats();
+    loadLatest();
   } else {
-    document.getElementById("loginError").innerText = "❌ Invalid credentials!";
+    document.getElementById("loginError").innerText = "❌ Invalid login.";
   }
 }
-
 function logout() {
-  document.getElementById("loginPage").classList.remove("hidden");
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  location.reload();
+}
+function showSection(id) {
+  document.querySelectorAll('.panel-section').forEach(s => s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
 }
 
-// Navigation
-function switchPage(pageId) {
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  document.getElementById(pageId + "Page").classList.remove("hidden");
-}
-
-// Dashboard Data
-function loadDashboard() {
+// ================= Dashboard
+function loadStats() {
   db.ref("links").once("value").then(snapshot => {
-    const links = Object.entries(snapshot.val() || {});
-    const summary = document.getElementById("summary");
-    const last5 = links.slice(-5).reverse();
-    document.getElementById("lastLinks").innerHTML = last5.map(([alias]) => `<li>${alias}</li>`).join("");
-    const today = new Date().toDateString();
-    const todayCount = links.filter(([_, d]) => new Date(d.createdAt).toDateString() === today).length;
-    summary.innerHTML = `
-      <p>🔗 Total Links: ${links.length}</p>
-      <p>📆 Links Created Today: ${todayCount}</p>
+    const all = snapshot.val() || {};
+    let today = 0;
+    const now = new Date().setHours(0,0,0,0);
+    Object.values(all).forEach(l => {
+      if (l.createdAt >= now) today++;
+    });
+    document.getElementById("stats").innerHTML = `
+      <p>🔢 Total Links: ${Object.keys(all).length}</p>
+      <p>📅 Today’s Links: ${today}</p>
     `;
-    drawChart(todayCount, links.length);
+  });
+}
+function loadLatest() {
+  db.ref("links").orderByChild("createdAt").limitToLast(5).once("value").then(snapshot => {
+    const links = Object.entries(snapshot.val() || {}).reverse();
+    let html = `<h3>🆕 Latest Links</h3><ul>`;
+    links.forEach(([alias, data]) => {
+      html += `<li><a href="/file/?alias=${alias}" target="_blank">${alias}</a></li>`;
+    });
+    html += `</ul>`;
+    document.getElementById("latestLinks").innerHTML = html;
   });
 }
 
-function drawChart(todayCount, totalCount) {
-  const ctx = document.getElementById('analyticsChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: ['Today', 'Total'],
-      datasets: [{
-        label: 'Links',
-        data: [todayCount, totalCount - todayCount],
-        backgroundColor: ['#3b82f6', '#64748b'],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { labels: { color: '#fff' } } }
-    }
-  });
-}
-
-// Manage URLs
-let allLinks = [];
-let currentIndex = 0;
-const pageSize = 5;
-
+// ================= Manage URLs
 function loadLinks() {
   db.ref("links").once("value").then(snapshot => {
     allLinks = Object.entries(snapshot.val() || {});
@@ -86,81 +68,101 @@ function loadLinks() {
     renderBatch();
   });
 }
-
 function renderBatch() {
-  const table = document.getElementById("urlTable");
-  table.innerHTML = "";
-  const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
+  const tbody = document.getElementById("urlTable");
+  tbody.innerHTML = "";
   const now = Date.now();
+  const base = location.origin + "/file/?alias=";
+  const batch = allLinks.slice(currentIndex, currentIndex + pageSize);
 
-  batch.forEach(([alias, data]) => {
-    const expired = data.expiresAt && now > data.expiresAt;
-    const expiry = data.expiresAt ? new Date(data.expiresAt).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️";
-    db.ref("clicks/" + alias).once("value").then(clickSnap => {
-      const clicks = clickSnap.exists() ? Object.keys(clickSnap.val()).length : 0;
+  batch.forEach(([alias, info]) => {
+    db.ref("clicks/" + alias).once("value").then(snap => {
+      const clicks = snap.exists() ? Object.keys(snap.val()).length : 0;
+      const expired = info.expiresAt && now > info.expiresAt;
+      const exp = info.expiresAt ? new Date(info.expiresAt).toLocaleString() + (expired ? " ❌ Expired" : "") : "♾️";
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${alias}</td>
-        <td><a href="${data.url}" target="_blank">${data.url}</a></td>
+        <td><a href="${info.url}" target="_blank">${info.url}</a></td>
         <td>${clicks}</td>
-        <td>${expiry}</td>
-        <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${location.origin}/file/?alias=${alias}&size=100x100"></td>
-        <td><button onclick="deleteLink('${alias}')" class="auth-button">Delete</button></td>
-      `;
-      table.appendChild(tr);
+        <td>${exp}</td>
+        <td><a href="${base}${alias}" target="_blank">Short</a></td>
+        <td><img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(base + alias)}&size=100x100"></td>
+        <td>
+          <button onclick="deleteLink('${alias}')">🗑️</button>
+          <button onclick="showDetails('${alias}', this)">📈</button>
+        </td>`;
+      tbody.appendChild(tr);
     });
   });
 
-  const totalPages = Math.ceil(allLinks.length / pageSize);
-  document.getElementById("pageInfo").innerText = `Page ${currentIndex / pageSize + 1} of ${totalPages}`;
+  const pageInfo = document.getElementById("pageInfo");
+  pageInfo.innerText = `Page ${Math.floor(currentIndex / pageSize) + 1}`;
 }
-
 function showNextBatch() {
   if (currentIndex + pageSize < allLinks.length) {
     currentIndex += pageSize;
     renderBatch();
   }
 }
-
 function showPrevBatch() {
   if (currentIndex >= pageSize) {
     currentIndex -= pageSize;
     renderBatch();
   }
 }
-
 function deleteLink(alias) {
-  if (confirm("Delete this link?")) {
+  if (confirm("Delete " + alias + "?")) {
     db.ref("links/" + alias).remove();
     db.ref("clicks/" + alias).remove();
     loadLinks();
   }
 }
+function showDetails(alias, btn) {
+  const tr = btn.closest("tr");
+  const next = tr.nextElementSibling;
+  if (next && next.classList.contains("details-row")) {
+    next.remove();
+    return;
+  }
 
-// 🔒 Ban System
+  db.ref("clicks/" + alias).once("value").then(snap => {
+    const data = snap.val();
+    const row = document.createElement("tr");
+    row.classList.add("details-row");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.innerHTML = data ? Object.values(data).map(c => `
+      <div>
+        <b>Time:</b> ${new Date(c.timestamp).toLocaleString()}<br/>
+        <b>IP:</b> ${c.ip} | ${c.country || ''}, ${c.city || ''}<br/>
+        <b>Device:</b> ${c.device}
+      </div>
+    `).join("<hr>") : "No Clicks Yet.";
+    row.appendChild(td);
+    tr.after(row);
+  });
+}
+
+// ================== Ban IPs
 function banIp() {
   const ip = document.getElementById("banIpInput").value.trim();
   if (ip) {
     db.ref("banned/" + ip).set(true).then(() => {
-      document.getElementById("banIpInput").value = "";
-      loadBannedIps();
+      alert("IP Banned.");
+      loadBanList();
     });
   }
 }
-
-function unbanIp(ip) {
-  db.ref("banned/" + ip).remove().then(loadBannedIps);
-}
-
-function loadBannedIps() {
-  db.ref("banned").once("value").then(snapshot => {
-    const list = document.getElementById("bannedList");
-    list.innerHTML = "";
-    const banned = snapshot.val() || {};
-    Object.keys(banned).forEach(ip => {
-      const li = document.createElement("li");
-      li.innerHTML = `${ip} <button onclick="unbanIp('${ip}')" class="auth-button">Unban</button>`;
-      list.appendChild(li);
-    });
+function loadBanList() {
+  db.ref("banned").once("value").then(snap => {
+    const list = snap.val() || {};
+    const html = Object.keys(list).map(ip => `
+      <li>${ip} <button onclick="unbanIp('${ip}')">❌ Unban</button></li>
+    `).join("");
+    document.getElementById("bannedList").innerHTML = html;
   });
+}
+function unbanIp(ip) {
+  db.ref("banned/" + ip).remove().then(() => loadBanList());
 }
