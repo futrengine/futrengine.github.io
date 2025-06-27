@@ -10,9 +10,11 @@ async function download() {
   output.innerHTML = "⏳ Fetching download link...";
 
   try {
-    const res = await fetch("https://sudomedia.onrender.com/api/instagram", {
+    const res = await fetch("https://corsproxy.io/?https://sudomedia.onrender.com/api/instagram", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ url })
     });
 
@@ -24,7 +26,7 @@ async function download() {
         ✅ <a href="${media}" target="_blank" download>Click here to download</a>
       `;
     } else {
-      output.innerHTML = "❌ Could not fetch media.";
+      output.innerHTML = "❌ Could not fetch media. jachu";
     }
   } catch (e) {
     console.error("Fetch error:", e);
