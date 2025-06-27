@@ -10,7 +10,7 @@ async function download() {
   output.innerHTML = "⏳ Fetching download link...";
 
   try {
-    const res = await fetch("https://3ef2889e-1afd-4f09-b501-ebbed725ecfd-00-2oh5jrkyumor0.sisko.replit.dev/getInstaMedia", {
+    const res = await fetch("https://insta-backend.onrender.com/getInstaMedia", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
