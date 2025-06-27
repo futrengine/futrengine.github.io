@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #f1f1f1, #e0e0ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  text-align: center;
+  padding: 30px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: floatIn 0.7s ease-out;
+}
+
+input {
+  padding: 10px;
+  width: 90%;
+  border-radius: 10px;
+  border: 1px solid #999;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+button {
+  padding: 10px 30px;
+  background-color: #6558f5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: #4b3bc2;
+}
+
+#output {
+  margin-top: 20px;
+}
+
+@keyframes floatIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
