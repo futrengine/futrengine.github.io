@@ -1,5 +1,5 @@
 async function download() {
-  const url = document.getElementById("instaUrl").value;
+  const url = document.getElementById("instaUrl").value.trim();
   const output = document.getElementById("output");
 
   if (!url.includes("instagram.com")) {
@@ -7,27 +7,32 @@ async function download() {
     return;
   }
 
-  output.innerHTML = "⏳ Fetching download link...";
+  output.innerHTML = "⏳ Fetching media link…";
 
   try {
-    const res = await fetch("https://corsproxy.io/?https://sudomedia.onrender.com/api/instagram", {
+    const res = await fetch("https://insta-api-futr.onrender.com/api/instagram", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url })
     });
 
-    const data = await res.json();
-
-    if (data.status === "success" && data.downloads.length) {
-      const media = data.downloads[0].url;
-      output.innerHTML = \`
-        ✅ <a href="\${media}" target="_blank" download>Click here to download</a>
-      \`;
-    } else {
-      output.innerHTML = "❌ Could not fetch media.";
+    if (!res.ok) {
+      const err = await res.json();
+      output.innerHTML = `❗️ Error: ${err.error || res.statusText}`;
+      return;
     }
+
+    const data = await res.json();
+    if (data.media) {
+      output.innerHTML = `
+        ✅ <a href="${data.media}" target="_blank" download>Download Media</a>
+      `;
+    } else {
+      output.innerHTML = "⚠️ No media detected in that link.";
+    }
+
   } catch (e) {
     console.error("Fetch error:", e);
-    output.innerHTML = "🚨 Error: " + e.message;
+    output.innerHTML = "🚨 Network Error: " + e.message;
   }
 }
