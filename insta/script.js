@@ -25,7 +25,7 @@ async function download() {
         ✅ <a href="${data.media}" target="_blank" download>Click here to download</a>
       `;
     } else {
-      output.innerHTML = "❌ Could not fetch media.";
+      output.innerHTML = "❌ Could not fetch media. ui";
     }
   } catch (e) {
     output.innerHTML = "🚨 Error: " + e.message;
