@@ -10,24 +10,24 @@ async function download() {
   output.innerHTML = "⏳ Fetching download link...";
 
   try {
-    const res = await fetch("https://insta-backend.onrender.com/getInstaMedia", {
+    const res = await fetch("https://sudomedia.onrender.com/api/instagram", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url })
     });
 
     const data = await res.json();
 
-    if (data.media) {
+    if (data.status === "success" && data.downloads.length) {
+      const media = data.downloads[0].url;
       output.innerHTML = `
-        ✅ <a href="${data.media}" target="_blank" download>Click here to download</a>
+        ✅ <a href="${media}" target="_blank" download>Click here to download</a>
       `;
     } else {
       output.innerHTML = "❌ Could not fetch media.";
     }
   } catch (e) {
+    console.error("Fetch error:", e);
     output.innerHTML = "🚨 Error: " + e.message;
   }
 }
