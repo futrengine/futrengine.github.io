@@ -7,10 +7,10 @@ function showSuggestions(value) {
 
     if (value.length >= 3) {
         const predefinedSuggestions = [
-            { name: 'YouTube', logo: 'https://futrengine.github.io/images/youtube-logo.png', link: 'https://www.youtube.com' },
-            { name: 'Gmail', logo: 'https://futrengine.github.io/images/gmail-logo.png', link: 'https://mail.google.com' },
-            { name: 'Drive', logo: 'https://futrengine.github.io/images/drive-logo.png', link: 'https://drive.google.com' },
-            { name: 'Google', logo: 'https://futrengine.github.io/images/google-logo.png', link: 'https://www.google.com' }
+            { name: 'YouTube', logo: '/images/youtube-logo.png', link: 'https://www.youtube.com' },
+            { name: 'Gmail', logo: '/images/gmail-logo.png', link: 'https://mail.google.com' },
+            { name: 'Drive', logo: '/images/drive-logo.png', link: 'https://drive.google.com' },
+            { name: 'Google', logo: '/images/google-logo.png', link: 'https://www.google.com' }
         ];
 
         predefinedSuggestions.forEach(suggestion => {
