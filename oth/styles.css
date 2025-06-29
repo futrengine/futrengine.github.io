@@ -1,0 +1,309 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fullscreen Background Image */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://futrengine.github.io/images/background.png') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+/* Header */
+
+@media screen and (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+}
+
+
+.header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+}
+
+.auth-button {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    margin-right: 10px;
+}
+
+.auth-button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+}
+
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 15px;
+    }
+}
+
+/* Modern Container */
+.container {
+    max-width: 90%;
+    width: 500px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Heading */
+h1 {
+    color: #ff416c;
+}
+
+/* Modern Search Bar */
+
+@media screen and (max-width: 600px) {
+    .search-container {
+        flex-direction: column;
+    }
+    #search-button {
+        margin-top: 10px;
+        width: 100%;
+    }
+}
+
+
+/* Modern Search Bar */
+.search-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+#search-input {
+    padding: 12px;
+    width: 250px; /* Default width */
+    max-width: 80%;
+    border: none;
+    border-radius: 30px;
+    outline: none;
+    font-size: 16px;
+    transition: all 0.4s ease-in-out;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+}
+
+/* Floating animation on focus */
+#search-input:focus {
+    width: 320px; /* Expands when clicked */
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: 0px 0px 15px rgba(255, 65, 108, 0.5);
+    text-align: left;
+    padding-left: 15px;
+}
+
+/* Placeholder animation */
+#search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+    transition: 0.3s ease-in-out;
+}
+
+#search-input:focus::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Search Button */
+#search-button {
+    padding: 12px 20px;
+    margin-left: 10px;
+    border: none;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+#search-button:hover {
+    transform: scale(1.1);
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+    .google-services {
+        flex-direction: column;
+        align-items: center;
+    }
+    .service-button {
+        width: 90%;
+    }
+}
+
+
+/* Google Services */
+.google-services {
+    display: flex;
+    width: 200%; /* Ensures both pages fit correctly */
+    transition: transform 0.3s ease-in-out; /* Fast and smooth slide */
+}
+
+.service-button {
+    text-align: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+    width: 130px;
+    margin: 5px;
+    text-decoration: none; /* Removes underlines */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+}
+
+.service-button:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.service-button img {
+    max-width: 50px;
+    transition: 0.3s ease-in-out;
+}
+
+.service-button span {
+    margin-top: 5px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.service-button a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Responsive Fix */
+@media screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    #search-input {
+        width: 100%;
+    }
+
+    #search-button {
+        padding: 10px 15px;
+    }
+
+    .google-services {
+        flex-direction: column;
+    }
+}
+
+
+.suggestion {
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.suggestion img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.nav-button {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border-radius: 100px;
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
+    align-items: center;
+    display: inline-block;
+    margin-bottom: 20px; /* Adds space below the button */
+}
+
+.nav-button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+}
+
+.user-text {
+    color: red;
+    margin-right: 10px;
+}
+
+
+
+.google-services-wrapper {
+    text-align: center;
+    margin-top: 20px;
+    overflow: hidden;
+    width: 100%;
+}
+
+
+
+
+.shortcut-page {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 50%; /* Each page takes up 50% of the container */
+    flex-shrink: 0;
+}
+
+#next-button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s ease-in-out;
+}
+
+
+#next-button:hover {
+    transform: scale(1.1);
+    background: linear-gradient(45deg, #ff4b2b, #ff416c);
+}
