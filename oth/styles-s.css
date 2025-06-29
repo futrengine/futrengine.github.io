@@ -1,7 +1,7 @@
 /* Modern Input Fields */
 body {
     font-family: 'Poppins', sans-serif;
-    background: url('https://futrengine.github.io/images/background.png') no-repeat center center fixed;
+    background: url('/images/background.png') no-repeat center center fixed;
     background-size: cover;
     color: white;
     display: flex;
