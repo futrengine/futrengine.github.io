@@ -269,3 +269,48 @@ h1 {
     width: 90%;
   }
 }
+
+
+/* Auth Buttons */
+.auth-btn {
+  background: linear-gradient(135deg, #FF416C, #FF4B2B);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 5px rgba(255, 65, 108, 0.4);
+}
+
+.auth-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 65, 108, 0.6);
+}
+
+.auth-btn.danger {
+  background: linear-gradient(135deg, #333, #111);
+  color: #FF416C;
+  border: 1px solid #FF416C;
+}
+
+.auth-btn.danger:hover {
+  background-color: #1a1a1a;
+  box-shadow: 0 0 10px rgba(255, 65, 108, 0.6);
+  transform: scale(1.05);
+}
+
+/* User Text */
+.user-text {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.user-text.small {
+  font-size: 12px;
+  opacity: 0.7;
+}
