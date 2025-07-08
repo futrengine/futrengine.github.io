@@ -75,79 +75,15 @@ function generateUserID() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// Function to sign up
-function signUp() {
-    const name = document.getElementById('sign-up-name').value;
-    const phone = document.getElementById('sign-up-phone').value;
-    const email = document.getElementById('sign-up-email').value;
-    const password = document.getElementById('sign-up-password').value;
-    const messageElement = document.getElementById('sign-up-message');
 
-    if (name && phone && email && password) {
-        const userData = { name, phone, email, password, userID: generateUserID() };
-        localStorage.setItem(email, JSON.stringify(userData));
-        localStorage.setItem(phone, JSON.stringify(userData));
-
-        messageElement.textContent = 'Sign Up Successful!';
-        messageElement.style.color = 'green';
-
-        setTimeout(() => {
-            window.location.href = 'sign-in.html';
-        }, 1000);
-    } else {
-        messageElement.textContent = 'Please fill in all fields.';
-        messageElement.style.color = 'red';
-    }
-}
-
-// Function to sign in
-function signIn() {
-    const identifier = document.getElementById('sign-in-identifier').value;
-    const password = document.getElementById('sign-in-password').value;
-    const messageElement = document.getElementById('sign-in-message');
-
-    const storedData = JSON.parse(localStorage.getItem(identifier));
-
-    if (storedData && storedData.password === password) {
-        sessionStorage.setItem('loggedInUser', identifier);
-        messageElement.textContent = 'Sign In Successful!';
-        messageElement.style.color = 'green';
-
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1000);
-    } else {
-        messageElement.textContent = 'Invalid credentials. Please sign up first!';
-        messageElement.style.color = 'red';
-    }
-}
 
 // Function to check login status
-function checkLoginStatus() {
-    const loggedInUser = sessionStorage.getItem('loggedInUser');
-    const authButtons = document.getElementById('auth-buttons');
-    const userInfo = document.getElementById('user-info');
-
-    if (loggedInUser) {
-        const userData = JSON.parse(localStorage.getItem(loggedInUser));
-        authButtons.style.display = 'none';
-        userInfo.style.display = 'block';
-        document.getElementById('user-email').textContent = `Welcome, ${userData.name}`;
-        document.getElementById('user-id').textContent = `ID: ${userData.userID}`;
-    } else {
-        authButtons.style.display = 'flex';
-        userInfo.style.display = 'none';
-    }
-}
 
 // Function to sign out
-function signOut() {
-    sessionStorage.removeItem('loggedInUser');
-    window.location.href = 'index.html';
-}
+
 
 // Ensure login status is checked on page load
-document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
 
 document.getElementById("search-input").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
@@ -187,4 +123,61 @@ document.addEventListener("DOMContentLoaded", function () {
 
     showPage(0);
 });
+
+const googleBtn = document.getElementById("google-signin-btn");
+const userInfo = document.getElementById("user-info");
+const logoutBtn = document.getElementById("logout-btn");
+const userName = document.getElementById("user-name");
+const userEmail = document.getElementById("user-email");
+const userPic = document.getElementById("user-pic");
+
+// Google Sign In
+googleBtn.addEventListener("click", async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    const result = await auth.signInWithPopup(provider);
+    const user = result.user;
+
+    // Save user data to Firebase Realtime DB
+    db.ref("users/" + user.uid).set({
+      name: user.displayName,
+      email: user.email,
+      photoURL: user.photoURL
+    });
+
+    // Save in session
+    sessionStorage.setItem("loggedInUser", user.uid);
+    updateUI(user);
+  } catch (error) {
+    console.error("Google Sign-In Error:", error.message);
+  }
+});
+
+// Logout
+logoutBtn.addEventListener("click", () => {
+  auth.signOut().then(() => {
+    sessionStorage.removeItem("loggedInUser");
+    userInfo.style.display = "none";
+    googleBtn.style.display = "inline-block";
+  });
+});
+
+// Check login status on page load
+window.addEventListener("DOMContentLoaded", () => {
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      sessionStorage.setItem("loggedInUser", user.uid);
+      updateUI(user);
+    }
+  });
+});
+
+function updateUI(user) {
+  googleBtn.style.display = "none";
+  userInfo.style.display = "flex";
+  userName.textContent = user.displayName;
+  userEmail.textContent = user.email;
+  userPic.src = user.photoURL;
+}
+
 
