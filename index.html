@@ -8,24 +8,43 @@
     <meta name="monetag" content="b19f6e9f443e4e2f86096afd4e0ad877">
     <script src="//embed.typeform.com/next/embed.js"></script>
     <script src="https://fpyf8.com/88/tag.min.js" data-zone="153286" async data-cfasync="false"></script>
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyDLvg6bsqgsYakON3IveU8ZgUyDYl-opEA",
+  authDomain: "futrengine.firebaseapp.com",
+  projectId: "futrengine",
+  storageBucket: "futrengine.firebasestorage.app",
+  messagingSenderId: "670841394488",
+  appId: "1:670841394488:web:ef10417b366b385274ddcd",
+  measurementId: "G-5N8X77RYEP"
+};
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
+</script>
+
 </head>
 
-<body onload="checkLoginStatus()">
+<body>
     <div class="header">
-        <div id="auth-buttons">
-            <!-- Sign In & Sign Up -->
-            <a href="/oth/sign-in" class="auth-button">Sign In</a>
-            <a href="/oth/sign-up" class="auth-button">Sign Up</a>
-            
-            <!-- 👇 Newly Positioned Buttons -->
-            <a href="https://jachu.xyz/file/admin" class="auth-button">admin</a>
-        </div>
+        <div id="auth-area" style="position: absolute; top: 10px; left: 10px;">
+  <button id="google-signin-btn" style="padding: 10px 20px; border-radius: 20px;">Sign in with Google</button>
 
-        <div id="user-info" style="display: none;">
-            <span id="user-email" class="user-text"></span>
-            <span id="user-id" class="user-text"></span>
-            <button onclick="signOut()" class="auth-button">Sign Out</button>
-        </div>
+  <div id="user-info" style="display: none; align-items: center; gap: 10px;">
+    <img id="user-pic" style="width: 35px; height: 35px; border-radius: 50%;" />
+    <div>
+      <div id="user-name" style="font-weight: bold;"></div>
+      <div id="user-email" style="font-size: 12px;"></div>
+    </div>
+    <button id="logout-btn" style="margin-left: 10px;">Logout</button>
+  </div>
+</div>
+
     </div>
 
     <div class="container">
