@@ -32,18 +32,21 @@
 
 <body>
     <div class="header">
-        <div id="auth-area" style="position: absolute; top: 10px; left: 10px;">
-  <button id="google-signin-btn" style="padding: 10px 20px; border-radius: 20px;">Sign in with Google</button>
+        <div id="auth-area" style="position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 10px;">
+  <!-- Google Sign In Button -->
+  <button id="google-signin-btn" class="auth-btn">Sign in with Google</button>
 
+  <!-- User Info Display -->
   <div id="user-info" style="display: none; align-items: center; gap: 10px;">
-    <img id="user-pic" style="width: 35px; height: 35px; border-radius: 50%;" />
+    <img id="user-pic" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid #FF416C;" />
     <div>
-      <div id="user-name" style="font-weight: bold;"></div>
-      <div id="user-email" style="font-size: 12px;"></div>
+      <div id="user-name" class="user-text"></div>
+      <div id="user-email" class="user-text small"></div>
     </div>
-    <button id="logout-btn" style="margin-left: 10px;">Logout</button>
+    <button id="logout-btn" class="auth-btn danger">Logout</button>
   </div>
 </div>
+
 
     </div>
 
