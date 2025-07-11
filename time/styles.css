@@ -6,6 +6,7 @@ body {
     height: 100vh;
     background-color: black;
     overflow: hidden;
+    cursor: url('https://search.jachu.xyz/images/cursor.cur'), auto;
 }
 
 .text {
