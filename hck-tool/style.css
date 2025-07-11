@@ -4,6 +4,7 @@ body {
     font-family: 'Courier New', monospace;
     text-align: center;
     padding-top: 50px;
+    cursor: url('https://search.jachu.xyz/images/cursor.cur'), auto;
 }
 
 .container {
