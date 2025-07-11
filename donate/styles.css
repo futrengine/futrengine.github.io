@@ -11,6 +11,7 @@ body {
     background-image: url('https://futrengine.github.io/images/background.png');
     background-size: cover;
     background-position: center;
+    cursor: url('https://search.jachu.xyz/images/cursor.cur'), auto;
 }
 
 .container {
