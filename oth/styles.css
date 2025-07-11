@@ -17,6 +17,7 @@ body {
   min-height: 100vh;
   text-align: center;
   overflow-x: hidden;
+  cursor: url('https://search.jachu.xyz/images/cursor.cur'), auto;
 }
 
 /* ========== HEADER ========== */
