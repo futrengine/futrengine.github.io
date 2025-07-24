@@ -1,0 +1,26 @@
+/* Custom CSS for Jachu Test */
+
+/* Apply Inter font family and antialiased smoothing */
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure the main container is centered and has a max-width */
+.container {
+    max-width: 500px; /* Adjust as needed for larger screens */
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+/* Simple transition for result display for smoother updates */
+.result-value {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Basic styling for the button on focus/active states */
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.5); /* Indigo-500 with opacity */
+}
