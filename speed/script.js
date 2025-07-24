@@ -1,4 +1,4 @@
-// script.js - Jachu Test Internet Speed Test Logic (Updated with Enhanced Error Logging)
+// script.js - Jachu Test Internet Speed Test Logic (Updated Ping URL)
 
 // Get DOM elements
 const startButton = document.getElementById('startButton');
@@ -15,7 +15,8 @@ const uploadKbps = document.getElementById('uploadKbps');
 
 // Test file URLs and sizes (approximate for simulation)
 // For a real test, these would be dedicated files on your server.
-const PING_TEST_URL = 'https://www.google.com/images/phd/retina_logo_2x.png?nocache=' + Date.now(); // Small image for ping
+// Changed PING_TEST_URL to a more reliable Cloudflare endpoint for network diagnostics.
+const PING_TEST_URL = 'https://www.cloudflare.com/cdn-cgi/trace?nocache=' + Date.now(); // Small, reliable endpoint for ping
 const DOWNLOAD_TEST_URL = 'https://placehold.co/5000x5000/000000/FFFFFF/png?text=DownloadTest'; // Large dummy image for download (approx 25MB)
 const DOWNLOAD_FILE_SIZE_BYTES = 25 * 1024 * 1024; // Approximate size of the dummy download file in bytes (25 MB)
 const UPLOAD_TEST_URL = 'https://httpbin.org/post'; // Public echo service for upload test
@@ -59,7 +60,7 @@ function showError(message = 'An error occurred during the test. Please try agai
 // Function to calculate and display ping
 async function testPing() {
     try {
-        console.log('Starting ping test...');
+        console.log('Starting ping test to:', PING_TEST_URL);
         const startTime = performance.now();
         await fetch(PING_TEST_URL, { cache: 'no-store' }); // Prevent caching
         const endTime = performance.now();
@@ -77,7 +78,7 @@ async function testPing() {
 // Function to calculate and display download speed
 async function testDownload() {
     try {
-        console.log('Starting download test...');
+        console.log('Starting download test from:', DOWNLOAD_TEST_URL);
         const startTime = performance.now();
         const response = await fetch(DOWNLOAD_TEST_URL, { cache: 'no-store' });
         if (!response.ok) {
@@ -131,7 +132,7 @@ async function testDownload() {
 // Function to calculate and display upload speed
 async function testUpload() {
     try {
-        console.log('Starting upload test...');
+        console.log('Starting upload test to:', UPLOAD_TEST_URL);
         // Create a dummy blob of data for upload
         const data = new Uint8Array(UPLOAD_FILE_SIZE_BYTES).map(() => Math.floor(Math.random() * 256));
         const blob = new Blob([data], { type: 'application/octet-stream' });
