@@ -6,7 +6,7 @@ document.getElementById('donateButton').addEventListener('click', function() {
 
 function redirectToCashfree() {
     // Cashfree payment gateway URL
-    const cashfreeURL = 'https://payments.cashfree.com/forms/donateme'; // Your actual Cashfree payment link
+    const cashfreeURL = 'https://rzp.io/rzp/Kamarjahan'; // Your actual Cashfree payment link
 
     // Redirect to the Cashfree payment page
     window.location.href = cashfreeURL;
