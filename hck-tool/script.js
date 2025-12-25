@@ -1,81 +1,114 @@
+/* ========== CONFIGURATION ========== */
 let selectedPlatform = "";
-let redirectURL = {
+let targetUser = "";
+const redirectURL = {
     "Google": "https://www.accounts.google.com",
-    "Instagram": "https://www.instagram.com/kammu.in/",
+    "Instagram": "https://www.instagram.com",
     "WhatsApp": "https://web.whatsapp.com",
     "Facebook": "https://www.facebook.com",
-    "Twitter": "https://twitter.com"
+    "Twitter": "https://twitter.com",
+    "Snapchat": "https://www.snapchat.com"
 };
 
-
-
-function goToPage(platform) {
-    selectedPlatform = platform;
-    document.getElementById("homePage").style.display = "none";
-    document.getElementById("inputPage").style.display = "block";
-    
-    document.getElementById("platformName").innerText = `Hacking ${platform}`;
-    if (platform === "WhatsApp") {
-        document.getElementById("inputLabel").innerText = "Enter Target Phone Number (with country code):";
-        document.getElementById("username").placeholder = "+1234567890";
-    } else {
-        document.getElementById("inputLabel").innerText = "Enter Target Username:";
-        document.getElementById("username").placeholder = "Enter username";
-    }
+/* ========== NAVIGATION ========== */
+function showStep(stepId) {
+    document.querySelectorAll('.terminal-body').forEach(el => el.classList.add('hidden'));
+    document.getElementById(stepId).classList.remove('hidden');
 }
 
-function startHacking() {
-    let username = document.getElementById("username").value.trim();
-    if (username === "") {
-        alert("Enter a valid username or phone number!");
+function selectTarget(platform) {
+    selectedPlatform = platform;
+    document.getElementById('target-display').innerText = platform;
+    showStep('step-2');
+}
+
+function resetTool() {
+    document.getElementById('username').value = "";
+    document.getElementById('console-output').innerHTML = "";
+    document.getElementById('progress-bar').style.width = "0%";
+    showStep('step-1');
+}
+
+/* ========== HACKING LOGIC ========== */
+function startAttack() {
+    targetUser = document.getElementById('username').value.trim();
+    if (!targetUser) {
+        alert("ERROR: TARGET IDENTIFIER REQUIRED");
         return;
     }
+    
+    showStep('step-3');
+    runConsoleLogs();
+}
 
-    document.getElementById("inputPage").style.display = "none";
-    document.getElementById("loadingScreen").style.display = "block";
+function runConsoleLogs() {
+    const consoleBox = document.getElementById('console-output');
+    const progressBar = document.getElementById('progress-bar');
+    
+    // Fake technical logs
+    const logs = [
+        `[INIT] Resolving host for ${selectedPlatform}...`,
+        `[INFO] Target identified: ${targetUser}`,
+        `[NET] Connecting to 192.168.0.1 via port 443...`,
+        `[SUCCESS] Connection established.`,
+        `[WARN] Firewall detected (Cloudflare).`,
+        `[EXEC] Bypassing firewall using ProxyChain...`,
+        `[SUCCESS] Bypass successful.`,
+        `[SQL] Injecting payload: ' OR 1=1 --`,
+        `[DATA] Dumping database table 'users'...`,
+        `[INFO] Hashing algorithm detected: SHA-256`,
+        `[BRUTE] Starting dictionary attack...`,
+        `[BRUTE] Testing top 1000 passwords...`,
+        `[BRUTE] Match found: [********]`,
+        `[DECRYPT] Decrypting salt key...`,
+        `[SUCCESS] Session token retrieved.`,
+        `[FINAL] Cleaning up logs...`
+    ];
 
-    let progressBar = document.getElementById("progressBar");
+    let i = 0;
     let width = 0;
-    let interval = setInterval(() => {
-        if (width >= 100) {
-            clearInterval(interval);
-            showResult(username);
-        } else {
-            width += 10; // Fake progress in 10 sec
+
+    // Interval to print logs
+    const interval = setInterval(() => {
+        if (i < logs.length) {
+            const p = document.createElement('div');
+            p.className = 'log-entry';
+            
+            // Color coding logs
+            if (logs[i].includes("WARN")) p.className += " log-warn";
+            else if (logs[i].includes("ERROR")) p.className += " log-err";
+            else if (logs[i].includes("SUCCESS")) p.className += " log-success";
+            
+            p.innerText = `> ${logs[i]}`;
+            consoleBox.appendChild(p);
+            consoleBox.scrollTop = consoleBox.scrollHeight; // Auto scroll
+            
+            i++;
+            width += (100 / logs.length);
             progressBar.style.width = width + "%";
+        } else {
+            clearInterval(interval);
+            setTimeout(() => showResult(), 1000);
         }
-    }, 1000);
+    }, 800); // Speed of logs (800ms per line)
 }
 
-function showResult(username) {
-    document.getElementById("loadingScreen").style.display = "none";
-    document.getElementById("resultPage").style.display = "block";
-
-    let password = generatePassword(username);
-    let details;
-
-    if (selectedPlatform === "WhatsApp") {
-        details = `<p>Phone Number: <b>${username}</b></p>
-                   <p>OTP: <b>${password}</b></p>`;
-    } else {
-        details = `<p>Username: <b>${username}</b></p>
-                   <p>Password: <b>${password}</b></p>`;
-    }
-
-    document.getElementById("hackedDetails").innerHTML = details;
+/* ========== RESULTS ========== */
+function showResult() {
+    showStep('step-4');
+    document.getElementById('res-user').innerText = targetUser;
+    document.getElementById('res-pass').innerText = generateFakePass();
 }
 
-function generatePassword(username) {
-    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let password = username.substring(0, 3);
-
-    for (let i = 0; i < 5; i++) {
-        password += characters.charAt(Math.floor(Math.random() * characters.length));
+function generateFakePass() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$";
+    let pass = "";
+    for (let i = 0; i < 8; i++) {
+        pass += chars.charAt(Math.floor(Math.random() * chars.length));
     }
-
-    return selectedPlatform === "WhatsApp" ? Math.floor(100000 + Math.random() * 900000) : password;
+    return pass;
 }
 
 function redirect() {
-    window.location.href = redirectURL[selectedPlatform];
+    window.location.href = redirectURL[selectedPlatform] || "https://google.com";
 }

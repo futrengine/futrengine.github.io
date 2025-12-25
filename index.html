@@ -2,157 +2,163 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FUTRENGINE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUTRENGINE PRO</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/oth/styles.css">
-    <script src="//embed.typeform.com/next/embed.js"></script>
-    <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-  apiKey: "AIzaSyDLvg6bsqgsYakON3IveU8ZgUyDYl-opEA",
-  authDomain: "futrengine.firebaseapp.com",
-  projectId: "futrengine",
-  storageBucket: "futrengine.firebasestorage.app",
-  messagingSenderId: "670841394488",
-  appId: "1:670841394488:web:ef10417b366b385274ddcd",
-  measurementId: "G-5N8X77RYEP"
-};
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-</script>
-
+    
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+    
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDLvg6bsqgsYakON3IveU8ZgUyDYl-opEA",
+        authDomain: "futrengine.firebaseapp.com",
+        projectId: "futrengine",
+        storageBucket: "futrengine.firebasestorage.app",
+        messagingSenderId: "670841394488",
+        appId: "1:670841394488:web:ef10417b366b385274ddcd",
+        measurementId: "G-5N8X77RYEP"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.database();
+    </script>
 </head>
 
 <body>
-    <div class="header">
-        <div id="auth-area" style="position: absolute; top: 10px; left: 10px; display: flex; align-items: center; gap: 10px;">
-  <!-- Google Sign In Button -->
-  <button id="google-signin-btn" class="auth-btn">Sign in with Google</button>
 
-  <!-- User Info Display -->
-  <div id="user-info" style="display: none; align-items: center; gap: 10px;">
-    <img id="user-pic" style="width: 35px; height: 35px; border-radius: 50%; border: 2px solid #FF416C;" />
-    <div>
-      <div id="user-name" class="user-text"></div>
-      <div id="user-email" class="user-text small"></div>
-    </div>
-    <button id="logout-btn" class="auth-btn danger">Logout</button>
-  </div>
-</div>
-
-<div  style="position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 10px;">
-  <!-- Google Sign In Button -->
-  <a href="https://kamarjahan.in" class="nav-button">My PortFolio</a>
-
-</div>
-
-    </div>
-
-    <div class="container">
-        <h1 id="heading">FUTRENGINE</h1>
-        <h3 id="heading3">This Makes Your Search Simple Dimple</h3>
-
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="🔍 Search anything..." oninput="showSuggestions(this.value)">
-            <button id="search-button" onclick="searchGoogle()">Search</button>
+    <nav class="pro-navbar">
+        <div class="logo-area">
+            <span class="brand-text">FUTRENGINE</span>
+            <span class="version-tag">PRO</span>
         </div>
-        <div id="suggestions"></div>
+        
+        <div class="user-actions">
+            <div id="date-display" class="date-text"></div>
+            <div class="divider"></div>
+            <button id="google-signin-btn" class="btn-primary">Sign In</button>
+            
+            <div id="user-info" class="user-profile hidden">
+                <span id="user-name">User</span>
+                <img id="user-pic" src="" alt="Profile">
+                <button id="logout-btn" class="btn-icon"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+    </nav>
 
-        <div class="google-services-wrapper">
-            <div class="google-services" id="shortcut-container">
-                <!-- Shortcut Pages -->
-                <div class="shortcut-page">
-                    <a href="https://www.youtube.com" class="service-button">
-                        <img src="/images/youtube-logo.png" alt="YouTube Logo">
-                        <span>YouTube</span>
-                    </a>
-                    <a href="https://mail.google.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="Gmail Logo">
-                        <span>Gmail</span>
-                    </a>
-                    <a href="https://drive.google.com" class="service-button">
-                        <img src="/images/drive-logo.png" alt="Drive Logo">
-                        <span>Drive</span>
-                    </a>
-                    <a href="https://www.google.com" class="service-button">
-                        <img src="/images/google-logo.png" alt="Google Logo">
-                        <span>Google</span>
-                    </a>
-                    <a href="https://www.instagram.com" class="service-button">
-                        <img src="/images/instagram-logo.png" alt="Instagram Logo">
-                        <span>Instagram</span>
-                    </a>
-                    <a href="/time/time" class="service-button">
-                        <img src="/images/clock.png" alt="Time Logo">
-                        <span>TIME</span>
-                    </a>
-                    <a href="/hck-tool/index" class="service-button">
-                        <img src="/images/tool.png" alt="Tool Logo">
-                        <span>SocialMedia Hack Tool</span>
-                    </a>
-                    <a href="https://jachu.xyz" class="service-button">
-                        <img src="/images/pdf.png" alt="PDF Editor">
-                        <span>Link Shortener</span>
-                    </a>
-                    <a href="/clock/index" class="service-button">
-                        <img src="/images/alarm.png" alt="Clock Logo">
-                        <span>Web Clock</span>
-                    </a>
+    <main class="workspace">
+        
+        <section class="focus-section">
+            <h1 id="clock-display" class="hero-clock">00:00</h1>
+            <p id="greeting-display" class="sub-greeting">Ready to start?</p>
+
+            <div class="search-container">
+                <div class="input-group">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search the web..." autocomplete="off">
+                    <button class="kbd-shortcut" onclick="searchGoogle()">↵</button>
                 </div>
+                <div id="suggestions" class="dropdown-suggestions"></div>
+            </div>
+        </section>
 
-                <div class="shortcut-page">
-                    <a href="https://chatgpt.com" class="service-button">
-                        <img src="/images/gpt.jpeg" alt="GPT Logo">
-                        <span>Chat GPT</span>
-                    </a>
-                    <a href="https://www.linkedin.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="LinkedIn Logo">
-                        <span>LinkedIn</span>
-                    </a>
-                    <a href="https://www.whatsapp.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="WhatsApp Logo">
-                        <span>WhatsApp</span>
-                    </a>
-                    <a href="https://www.snapchat.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="Snapchat Logo">
-                        <span>Snapchat</span>
-                    </a>
-                    <a href="https://www.netflix.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="Netflix Logo">
-                        <span>Netflix</span>
-                    </a>
-                    <a href="https://www.spotify.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="Spotify Logo">
-                        <span>Spotify</span>
-                    </a>
-                    <a href="https://www.tiktok.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="TikTok Logo">
-                        <span>TikTok</span>
-                    </a>
-                    <a href="https://www.amazon.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="Amazon Logo">
-                        <span>Amazon</span>
-                    </a>
-                    <a href="https://www.ebay.com" class="service-button">
-                        <img src="/images/gmail-logo.png" alt="eBay Logo">
-                        <span>eBay</span>
-                    </a>
+        <section class="app-section">
+            <div class="grid-header">
+                <h3>Quick Access</h3>
+                <div class="pagination-controls">
+                    <button id="prev-btn" class="nav-arrow disabled"><i class="fas fa-chevron-left"></i></button>
+                    <button id="next-btn" class="nav-arrow"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
-            <button id="next-button" class="nav-button">Next</button>
-        </div>
 
-        <a href="donate/donate.html" class="nav-button">DONATE OR DOUBLE</a>
-    </div>
+            <div class="slider-viewport">
+                <div class="slider-track" id="slider-track">
+                    <div class="app-page">
+                        <a href="https://www.youtube.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-youtube" style="color:#ef4444;"></i></div>
+                            <span>YouTube</span>
+                        </a>
+                        <a href="https://mail.google.com" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-envelope" style="color:#ef4444;"></i></div> <span>Gmail</span>
+                        </a>
+                        <a href="https://drive.google.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-google-drive" style="color:#10b981;"></i></div>
+                            <span>Drive</span>
+                        </a>
+                        <a href="https://www.google.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-google" style="color:#3b82f6;"></i></div>
+                            <span>Google</span>
+                        </a>
+                        <a href="https://www.instagram.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-instagram" style="color:#d946ef;"></i></div>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="/time/time" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-clock" style="color:#f59e0b;"></i></div>
+                            <span>Time</span>
+                        </a>
+                        <a href="/hck-tool/index" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-terminal" style="color:#6366f1;"></i></div>
+                            <span>Tools</span>
+                        </a>
+                        <a href="https://jachu.xyz" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-link" style="color:#8b5cf6;"></i></div>
+                            <span>Shortener</span>
+                        </a>
+                    </div>
+
+                    <div class="app-page">
+                        <a href="https://chatgpt.com" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-robot" style="color:#10b981;"></i></div>
+                            <span>ChatGPT</span>
+                        </a>
+                        <a href="https://www.linkedin.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-linkedin" style="color:#0a66c2;"></i></div>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://www.whatsapp.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-whatsapp" style="color:#22c55e;"></i></div>
+                            <span>WhatsApp</span>
+                        </a>
+                        <a href="https://www.netflix.com" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-play" style="color:#e50914;"></i></div>
+                            <span>Netflix</span>
+                        </a>
+                        <a href="https://open.spotify.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-spotify" style="color:#1db954;"></i></div>
+                            <span>Spotify</span>
+                        </a>
+                        <a href="https://www.tiktok.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-tiktok" style="color:#fff;"></i></div>
+                            <span>TikTok</span>
+                        </a>
+                        <a href="https://www.amazon.com" class="app-tile">
+                            <div class="icon-box"><i class="fab fa-amazon" style="color:#f97316;"></i></div>
+                            <span>Amazon</span>
+                        </a>
+                        <a href="/clock/index" class="app-tile">
+                            <div class="icon-box"><i class="fas fa-hourglass-half" style="color:#cbd5e1;"></i></div>
+                            <span>Timer</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer-links">
+            <a href="https://kamarjahan.in">Portfolio</a>
+            <span class="dot">·</span>
+            <a href="donate/donate.html">Donate</a>
+            <span class="dot">·</span>
+            <a href="donate/contact.html">Contact</a>
+        </footer>
+
+    </main>
 
     <script src="/oth/scripts.js"></script>
 </body>
-
 </html>
-
-

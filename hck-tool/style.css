@@ -1,69 +1,212 @@
-body {
-    background-color: #0a0a0a;
-    color: #00ff00;
-    font-family: 'Courier New', monospace;
-    text-align: center;
-    padding-top: 50px;
-    cursor: url('https://search.jachu.xyz/images/cursor.cur'), auto;
+/* ========== CONFIGURATION ========== */
+:root {
+    --terminal-bg: #0c0c0c;
+    --terminal-text: #33ff00; /* Hacker Green */
+    --terminal-dim: #1a8000;
+    --alert: #ff0000;
 }
 
-.container {
+body {
+    background-color: #000;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--terminal-text);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* ========== CRT EFFECT ========== */
+.scanline {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.2)
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ========== WINDOW ========== */
+.terminal-window {
     width: 90%;
-    max-width: 400px;
-    margin: auto;
-    background: #111;
+    max-width: 600px;
+    background: var(--terminal-bg);
+    border: 2px solid var(--terminal-text);
+    box-shadow: 0 0 20px rgba(51, 255, 0, 0.2);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+}
+
+.terminal-header {
+    background: #1a1a1a;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--terminal-dim);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.title {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.terminal-body {
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #00ff00;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========== ELEMENTS ========== */
+.ascii-art {
+    white-space: pre;
+    font-size: 8px;
+    color: var(--terminal-dim);
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 8px;
+}
+
+@media(min-width: 500px) {
+    .ascii-art { font-size: 12px; line-height: 12px; }
+}
+
+.system-msg {
+    border-bottom: 1px dashed var(--terminal-dim);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.grid-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
 button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    background: black;
-    color: #00ff00;
-    border: 1px solid #00ff00;
+    background: transparent;
+    border: 1px solid var(--terminal-dim);
+    color: var(--terminal-text);
+    padding: 15px;
+    font-family: 'Share Tech Mono', monospace;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.2s;
+    text-transform: uppercase;
 }
 
 button:hover {
-    background: #00ff00;
-    color: black;
+    background: var(--terminal-text);
+    color: #000;
+    box-shadow: 0 0 10px var(--terminal-text);
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    background: #000;
+    border: 1px solid var(--terminal-dim);
+    padding: 10px;
+    margin: 15px 0;
+}
+
+.prompt {
+    color: var(--terminal-dim);
+    margin-right: 10px;
 }
 
 input {
-    width: 90%;
-    padding: 10px;
-    margin-top: 10px;
-    background: black;
-    color: #00ff00;
-    border: 1px solid #00ff00;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'Share Tech Mono', monospace;
+    flex: 1;
+    outline: none;
+    font-size: 1.1rem;
 }
 
-.loading {
-    display: none;
-    margin-top: 20px;
-    font-size: 20px;
+/* ========== CONSOLE LOGS ========== */
+.console-box {
+    flex: 1;
+    background: #000;
+    border: 1px solid var(--terminal-dim);
+    padding: 10px;
+    font-size: 0.85rem;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    height: 250px;
+    color: #bbb;
+}
+
+.log-entry { margin-bottom: 4px; }
+.log-warn { color: yellow; }
+.log-err { color: red; }
+.log-success { color: var(--terminal-text); }
+
+.progress-container {
+    width: 100%;
+    height: 10px;
+    border: 1px solid var(--terminal-dim);
+    padding: 1px;
 }
 
 .progress-bar {
-    width: 100%;
-    height: 20px;
-    background: black;
-    border: 1px solid #00ff00;
-    margin-top: 10px;
-    position: relative;
-}
-
-.progress {
     width: 0%;
     height: 100%;
-    background: #00ff00;
-    position: absolute;
+    background: var(--terminal-text);
+    transition: width 0.2s;
 }
 
-h2 {
-    color: red;
+/* ========== RESULTS ========== */
+.result-box {
+    border: 1px solid var(--terminal-text);
+    padding: 20px;
+    margin: 20px 0;
+    text-align: left;
 }
+
+.success-msg {
+    color: var(--terminal-text);
+    font-size: 2rem;
+    text-align: center;
+    animation: blink 1s infinite;
+}
+
+.blink { animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.blur-reveal {
+    filter: blur(4px);
+    transition: 1s;
+    cursor: pointer;
+}
+.blur-reveal:hover { filter: blur(0); }
+
+.hidden { display: none; }
+.highlight { color: #fff; font-weight: bold; }
+.text-btn { border: none; font-size: 0.8rem; opacity: 0.7; }
+.text-btn:hover { background: transparent; color: #fff; opacity: 1; box-shadow: none; }

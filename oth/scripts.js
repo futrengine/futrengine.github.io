@@ -1,183 +1,122 @@
-var googleSearchURL = "https://www.google.com/search?q=";
+/* ========== CONFIGURATION ========== */
+const GOOGLE_SEARCH_URL = "https://www.google.com/search?q=";
 
-// Function to show search suggestions
-function showSuggestions(value) {
-    const suggestions = document.getElementById('suggestions');
-    suggestions.innerHTML = '';
+/* ========== DOM ELEMENTS ========== */
+const clockDisplay = document.getElementById("clock-display");
+const dateDisplay = document.getElementById("date-display");
+const greetingDisplay = document.getElementById("greeting-display");
+const searchInput = document.getElementById("search-input");
+const suggestionsBox = document.getElementById("suggestions");
+const sliderTrack = document.getElementById("slider-track");
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
 
-    if (value.length >= 3) {
-        const predefinedSuggestions = [
-            { name: 'YouTube', logo: '/images/youtube-logo.png', link: 'https://www.youtube.com' },
-            { name: 'Gmail', logo: '/images/gmail-logo.png', link: 'https://mail.google.com' },
-            { name: 'Drive', logo: '/images/drive-logo.png', link: 'https://drive.google.com' },
-            { name: 'Google', logo: '/images/google-logo.png', link: 'https://www.google.com' }
-        ];
+/* ========== TIME & DATE ========== */
+function updateTime() {
+    const now = new Date();
+    
+    // Clock (24h format for pro look)
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    clockDisplay.textContent = `${hours}:${minutes}`;
 
-        predefinedSuggestions.forEach(suggestion => {
-            if (suggestion.name.toLowerCase().includes(value.toLowerCase())) {
-                const suggestionElement = document.createElement('a');
-                suggestionElement.href = suggestion.link;
-                suggestionElement.classList.add('suggestion');
+    // Date (e.g., "Mon, 25 Dec")
+    const options = { weekday: 'short', day: 'numeric', month: 'short' };
+    dateDisplay.textContent = now.toLocaleDateString('en-US', options);
 
-                const logoImg = document.createElement('img');
-                logoImg.src = suggestion.logo;
-                logoImg.alt = suggestion.name + ' Logo';
-                suggestionElement.appendChild(logoImg);
+    // Dynamic Greeting
+    const h = now.getHours();
+    let msg = "Welcome back";
+    if (h < 12) msg = "Good morning";
+    else if (h < 18) msg = "Good afternoon";
+    else msg = "Good evening";
 
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = suggestion.name;
-                suggestionElement.appendChild(nameSpan);
-
-                suggestions.appendChild(suggestionElement);
-            }
-        });
-document.getElementById("search-input").addEventListener("focus", function() {
-    this.style.transition = "0.3s";
-    this.style.boxShadow = "0px 0px 10px rgba(255, 65, 108, 0.5)";
-});
-
-document.getElementById("search-input").addEventListener("blur", function() {
-    this.style.boxShadow = "none";
-});
-
-document.querySelectorAll(".service-button").forEach(button => {
-    button.addEventListener("mouseover", () => {
-        button.style.transform = "scale(1.1)";
-    });
-    button.addEventListener("mouseleave", () => {
-        button.style.transform = "scale(1)";
-    });
-});        
-        
-        
-
-        suggestions.style.display = 'block';
+    if (auth.currentUser) {
+        const firstName = auth.currentUser.displayName.split(' ')[0];
+        greetingDisplay.textContent = `${msg}, ${firstName}.`;
     } else {
-        suggestions.style.display = 'none';
+        greetingDisplay.textContent = `${msg}.`;
     }
 }
+setInterval(updateTime, 1000);
+updateTime();
 
-// Function to search Google
+/* ========== SEARCH ========== */
 function searchGoogle() {
-    const searchInput = document.getElementById('search-input').value;
-
-    if (searchInput.trim() === '') {
-        alert('Search is empty. Please enter a search query.');
+    const val = searchInput.value.trim();
+    if (!val) return;
+    
+    // Smart URL detection
+    if (val.includes('.') && !val.includes(' ')) {
+        const url = val.startsWith('http') ? val : `https://${val}`;
+        window.location.href = url;
     } else {
-        const searchQuery = encodeURIComponent(searchInput);
-        const fullGoogleSearchURL = `${googleSearchURL}${searchQuery}`;
-        window.location.href = fullGoogleSearchURL;
+        window.location.href = `${GOOGLE_SEARCH_URL}${encodeURIComponent(val)}`;
     }
 }
 
-// Function to generate a 6-digit personal ID
-function generateUserID() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+searchInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") searchGoogle();
+});
+
+/* ========== SLIDER CONTROLS ========== */
+let currentPage = 0;
+
+function updateSlider() {
+    // 0 = 0%, 1 = -50%
+    sliderTrack.style.transform = `translateX(${currentPage * -50}%)`;
+    
+    // Toggle Button States
+    if (currentPage === 0) {
+        prevBtn.classList.add('disabled');
+        nextBtn.classList.remove('disabled');
+    } else {
+        prevBtn.classList.remove('disabled');
+        nextBtn.classList.add('disabled');
+    }
 }
 
-
-
-// Function to check login status
-
-// Function to sign out
-
-
-// Ensure login status is checked on page load
-
-
-document.getElementById("search-input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        searchGoogle();
-    }
+nextBtn.addEventListener('click', () => {
+    currentPage = 1;
+    updateSlider();
 });
 
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const container = document.getElementById("shortcut-container");
-    const toggleButton = document.getElementById("next-button");
-    let currentPage = 0;
-    const totalPages = 2;
-
-    function showPage(page) {
-        const offset = page * -50;
-        container.style.transition = "transform 0.3s ease-in-out";
-        container.style.transform = `translateX(${offset}%)`;
-
-        // Change button text based on current page
-        if (page === totalPages - 1) {
-            toggleButton.textContent = "Previous";
-        } else {
-            toggleButton.textContent = "Next";
-        }
-    }
-
-    toggleButton.addEventListener("click", function () {
-        if (currentPage === totalPages - 1) {
-            currentPage = 0; // Go back to first page
-        } else {
-            currentPage = 1; // Move to next page
-        }
-        showPage(currentPage);
-    });
-
-    showPage(0);
+prevBtn.addEventListener('click', () => {
+    currentPage = 0;
+    updateSlider();
 });
 
+/* ========== FIREBASE AUTH ========== */
 const googleBtn = document.getElementById("google-signin-btn");
 const userInfo = document.getElementById("user-info");
 const logoutBtn = document.getElementById("logout-btn");
 const userName = document.getElementById("user-name");
-const userEmail = document.getElementById("user-email");
 const userPic = document.getElementById("user-pic");
 
-// Google Sign In
-googleBtn.addEventListener("click", async () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  try {
-    const result = await auth.signInWithPopup(provider);
-    const user = result.user;
-
-    // Save user data to Firebase Realtime DB
-    db.ref("users/" + user.uid).set({
-      name: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL
-    });
-
-    // Save in session
-    sessionStorage.setItem("loggedInUser", user.uid);
-    updateUI(user);
-  } catch (error) {
-    console.error("Google Sign-In Error:", error.message);
-  }
-});
-
-// Logout
-logoutBtn.addEventListener("click", () => {
-  auth.signOut().then(() => {
-    sessionStorage.removeItem("loggedInUser");
-    userInfo.style.display = "none";
-    googleBtn.style.display = "inline-block";
-  });
-});
-
-// Check login status on page load
-window.addEventListener("DOMContentLoaded", () => {
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      sessionStorage.setItem("loggedInUser", user.uid);
-      updateUI(user);
-    }
-  });
-});
-
 function updateUI(user) {
-  googleBtn.style.display = "none";
-  userInfo.style.display = "flex";
-  userName.textContent = user.displayName;
-  userEmail.textContent = user.email;
-  userPic.src = user.photoURL;
+    if (user) {
+        googleBtn.classList.add("hidden");
+        userInfo.classList.remove("hidden");
+        userName.textContent = user.displayName;
+        userPic.src = user.photoURL;
+        updateTime(); // Refresh greeting
+    } else {
+        googleBtn.classList.remove("hidden");
+        userInfo.classList.add("hidden");
+    }
 }
 
+auth.onAuthStateChanged(user => {
+    updateUI(user);
+    if(user) {
+        // Optional: User tracking or settings save
+        db.ref("users/" + user.uid).update({ lastLogin: new Date().toISOString() });
+    }
+});
 
+googleBtn.addEventListener("click", () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).catch(console.error);
+});
+
+logoutBtn.addEventListener("click", () => auth.signOut());
